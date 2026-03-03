@@ -9,41 +9,41 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Truman Tong
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/trumantong8.png" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[homepage](https://www.linkedin.com/in/truman-tong/)]
+[[github](https://github.com/trumantong8)]
+[[portfolio](team/trumantong8.md)]
 
 * Role: Project Advisor
+* Responsibilities: Integration, Ui, Coding, Rallier
 
-### Jane Doe
+### Tian Jiarui
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/tian-jiarui.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](https://github.com/Tian-Jiarui)]
 
 * Role: Team Lead
-* Responsibilities: UI
+* Responsibilities: Deliverables and deadlines, Scheduling and tracking, Ui 
 
-### Johnny Doe
+### Hong Tianyu
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/legendgirlie47.png" width="200px">
 
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
+[[github](http://github.com/legendgirlie47)][[portfolio](team/johndoe.md)]
 
 * Role: Developer
-* Responsibilities: Data
+* Responsibilities: Code quality 
 
 ### Jean Doe
 
 <img src="images/johndoe.png" width="200px">
 
 [[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[portfolio](team/trumantong8.md)]
 
 * Role: Developer
 * Responsibilities: Dev Ops + Threading
