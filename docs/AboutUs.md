@@ -26,7 +26,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](https://github.com/Tian-Jiarui)]
 
 * Role: Team Lead
-* Responsibilities: Deliverables and deadlines, Scheduling and tracking, Ui 
+* Responsibilities: Deliverables and deadlines, Scheduling and tracking, Ui
 
 ### Hong Tianyu
 
@@ -35,7 +35,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](http://github.com/legendgirlie47)]
 
 * Role: Developer
-* Responsibilities: Code quality 
+* Responsibilities: Code quality
 
 ### Shao Ray
 
@@ -53,4 +53,4 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](http://github.com/zhangshuhan05)]
 
 * Role: Developer
-* Responsibilities: Testing + Integration 
+* Responsibilities: Testing + Integration

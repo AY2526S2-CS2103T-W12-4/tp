@@ -12,17 +12,17 @@
 It is named `Friends And Money` (`FAM` for short) because is aimed to cultivate a FAMily culture between students and financial advisors
 
 FAM has utilises the following features: <br>
-* Add contact 
-* List contacts 
+* Add contact
+* List contacts
 * View contact (by index)
-* Find contacts by name keyword 
-* Edit contact 
+* Find contacts by name keyword
+* Edit contact
 * Delete contact (with confirmation)
 * Tagging (add/remove tags)
 
 ### Example usages:
   * add n/Tian Jiarui p/91234567 e/jiarui@gmail.com a/geylang 6767 #67-69 t/insurance
-  * edit 1 e/tianyu@gmail.com a/geylang st 123 
+  * edit 1 e/tianyu@gmail.com a/geylang st 123
 
 ---
 
