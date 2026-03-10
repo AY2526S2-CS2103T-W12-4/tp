@@ -7,7 +7,7 @@ public interface ConfirmationInterface {
     /**
      * User confirms the message.
      * @param message Message to be displayed.
-     * @return true if user confirms, false if user denies. 
+     * @return true if user confirms, false if user denies.
      */
     boolean confirm(String message);
 }
