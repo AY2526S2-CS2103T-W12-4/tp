@@ -165,6 +165,40 @@ public class AddCommandParserTest {
                 .build();
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB,
                 new AddCommand(expectedPersonWithoutEmailAndAddress));
+
+        // missing email with tag
+        Person expectedPersonWithoutEmailWithTag = new PersonBuilder()
+                .withName(VALID_NAME_BOB)
+                .withPhone(VALID_PHONE_BOB)
+                .withEmail("missing@email.empty")
+                .withAddress(VALID_ADDRESS_BOB)
+                .withTags(VALID_TAG_FRIEND)
+                .build();
+        assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + ADDRESS_DESC_BOB + TAG_DESC_FRIEND,
+                new AddCommand(expectedPersonWithoutEmailWithTag));
+
+        // missing address with tag
+        Person expectedPersonWithoutAddressWithTag = new PersonBuilder()
+                .withName(VALID_NAME_BOB)
+                .withPhone(VALID_PHONE_BOB)
+                .withEmail(VALID_EMAIL_BOB)
+                .withAddress("MISSING_ADDRESS")
+                .withTags(VALID_TAG_FRIEND)
+                .build();
+        assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + TAG_DESC_FRIEND,
+                new AddCommand(expectedPersonWithoutAddressWithTag));
+
+        // missing email and address with tags
+        Person expectedPersonWithoutOptionalFieldsWithTags = new PersonBuilder()
+                .withName(VALID_NAME_BOB)
+                .withPhone(VALID_PHONE_BOB)
+                .withEmail("missing@email.empty")
+                .withAddress("MISSING_ADDRESS")
+                .withTags(VALID_TAG_FRIEND, VALID_TAG_HUSBAND)
+                .build();
+        assertParseSuccess(parser,
+                NAME_DESC_BOB + PHONE_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND,
+                new AddCommand(expectedPersonWithoutOptionalFieldsWithTags));
     }
 
     @Test
