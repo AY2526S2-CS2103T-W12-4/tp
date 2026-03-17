@@ -23,11 +23,6 @@ public class ConfirmationDialog {
         alert.setHeaderText("Are you sure?");
         alert.setContentText(message);
 
-        // Apply the same dark theme used by the rest of the app
-        alert.getDialogPane().getStylesheets().add(
-                ConfirmationDialog.class.getResource("/view/DarkTheme.css").toExternalForm()
-        );
-
         Optional<ButtonType> result = alert.showAndWait(); // returns Optional
         return result.isPresent() && result.get() == ButtonType.OK; // Optional must be present & ( result == OK )
     }
