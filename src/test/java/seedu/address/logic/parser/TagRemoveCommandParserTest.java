@@ -26,7 +26,7 @@ public class TagRemoveCommandParserTest {
 
         Person person = new PersonBuilder()
             .withName("Alice")
-            .withTags("friend")  // ✅ ensure tag exists
+            .withTags("friend")
             .build();
         Model model = new ModelManager();
 
