@@ -140,7 +140,7 @@ public class AddCommandParserTest {
         Person expectedPersonWithoutEmail = new PersonBuilder()
                 .withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB)
-                .withEmail("unknown@example.com")
+                .withEmail("missing@email.empty")
                 .withAddress(VALID_ADDRESS_BOB)
                 .build();
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + ADDRESS_DESC_BOB,
@@ -151,7 +151,7 @@ public class AddCommandParserTest {
                 .withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB)
                 .withEmail(VALID_EMAIL_BOB)
-                .withAddress("Unknown")
+                .withAddress("MISSING_ADDRESS")
                 .build();
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB,
                 new AddCommand(expectedPersonWithoutAddress));
@@ -160,8 +160,8 @@ public class AddCommandParserTest {
         Person expectedPersonWithoutEmailAndAddress = new PersonBuilder()
                 .withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB)
-                .withEmail("unknown@example.com")
-                .withAddress("Unknown")
+                .withEmail("missing@email.empty")
+                .withAddress("MISSING_ADDRESS")
                 .build();
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB,
                 new AddCommand(expectedPersonWithoutEmailAndAddress));
