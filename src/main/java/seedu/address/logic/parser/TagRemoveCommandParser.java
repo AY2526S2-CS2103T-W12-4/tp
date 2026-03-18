@@ -45,15 +45,32 @@ public class TagRemoveCommandParser implements Parser<TagRemoveCommand> {
      */
     @Override
     public TagRemoveCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap =
-            ArgumentTokenizer.tokenize(args, PREFIX_TAG);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
+
+        String preamble = argMultimap.getPreamble().trim();
+        String[] preambleParts = preamble.split("\\s+");
+
+        for (String part : preambleParts) {
+            if (part.matches("[a-zA-Z]+/.*") && !part.startsWith("t/")) {
+                throw new ParseException("Invalid prefix detected: " + part);
+            }
+        }
+
+        if (preambleParts.length == 0) {
+            throw new ParseException("Missing index.");
+        }
+
+        Index index;
+        try {
+            index = ParserUtil.parseIndex(preambleParts[0]);
+        } catch (ParseException pe) {
+            throw new ParseException("Index is not a non-zero unsigned integer.");
+        }
 
         if (argMultimap.getAllValues(PREFIX_TAG).size() > 1) {
             throw new ParseException(
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagRemoveCommand.MESSAGE_USAGE));
         }
-
-        Index index = ParserUtil.parseIndex(argMultimap.getPreamble());
 
         Tag tag = ParserUtil.parseTag(
             argMultimap.getValue(PREFIX_TAG)
