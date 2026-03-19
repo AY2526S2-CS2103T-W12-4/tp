@@ -4,9 +4,15 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 
-<GridPane styleClass="status-bar" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane styleClass="status-bar" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+          style="-fx-background-color: #f0f0f0;
+          -fx-border-color: #3d3d3d;
+          -fx-border-width: 1 0 0 0;
+          -fx-padding: 4 10 4 10;">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10" />
   </columnConstraints>
-  <Label fx:id="saveLocationStatus" />
+  <Label fx:id="saveLocationStatus"
+         style="-fx-font-size: 11px; -fx-text-fill: #555555;"/>
 </GridPane>
+

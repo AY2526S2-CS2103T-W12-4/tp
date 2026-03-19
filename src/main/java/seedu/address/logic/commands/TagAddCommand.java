@@ -80,7 +80,7 @@ public class TagAddCommand extends Command {
 
         model.setPerson(personAtIndex, editedPerson);
 
-        return new CommandResult(String.format(MESSAGE_TAG_PERSON_SUCCESS, tag, editedPerson.getName()));
+        return new CommandResult(String.format(MESSAGE_TAG_PERSON_SUCCESS, tag.tagName, editedPerson.getName()));
     }
 
     @Override

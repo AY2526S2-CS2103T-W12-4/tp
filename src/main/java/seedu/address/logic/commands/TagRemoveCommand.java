@@ -79,7 +79,7 @@ public class TagRemoveCommand extends Command {
 
         model.setPerson(personAtIndex, editedPerson);
 
-        return new CommandResult(String.format(MESSAGE_REMOVE_TAG_SUCCESS, tag, editedPerson.getName()));
+        return new CommandResult(String.format(MESSAGE_REMOVE_TAG_SUCCESS, tag.tagName, editedPerson.getName()));
     }
 
     @Override

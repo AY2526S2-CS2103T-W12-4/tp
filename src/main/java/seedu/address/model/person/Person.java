@@ -111,8 +111,8 @@ public class Person {
         }
         //reject same email except placeholder email
         boolean samePhone = otherPerson.getPhone().equals(getPhone());
-        boolean thisEmailIsPlaceholder = getEmail().toString().equals("unknown@example.com");
-        boolean otherEmailIsPlaceholder = otherPerson.getEmail().toString().equals("unknown@example.com");
+        boolean thisEmailIsPlaceholder = getEmail().toString().equals("missing@email.empty");
+        boolean otherEmailIsPlaceholder = otherPerson.getEmail().toString().equals("missing@email.empty");
         boolean sameRealEmail = !thisEmailIsPlaceholder
                 && !otherEmailIsPlaceholder
                 && otherPerson.getEmail().toString().equalsIgnoreCase(getEmail().toString());
