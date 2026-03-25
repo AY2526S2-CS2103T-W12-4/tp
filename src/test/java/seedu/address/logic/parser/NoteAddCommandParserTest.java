@@ -16,27 +16,27 @@ public class NoteAddCommandParserTest {
 
     @Test
     public void parse_validArgs_success() {
-        assertParseSuccess(parser, "1: Met at career fair",
+        assertParseSuccess(parser, "1 note/Met at career fair",
                 new NoteAddCommand(INDEX_FIRST_PERSON, "Met at career fair"));
     }
 
     @Test
     public void parse_leadingTrailingWhitespace_success() {
-        assertParseSuccess(parser, "  1: Met at career fair  ",
+        assertParseSuccess(parser, "  1 note/Met at career fair  ",
                 new NoteAddCommand(INDEX_FIRST_PERSON, "Met at career fair"));
     }
 
     @Test
     public void parse_noteTextWithColons_success() {
         // Colons after the first ": " should be treated as note content
-        assertParseSuccess(parser, "1: Note with: extra: colons",
+        assertParseSuccess(parser, "1 note/Note with: extra: colons",
                 new NoteAddCommand(INDEX_FIRST_PERSON, "Note with: extra: colons"));
     }
 
     @Test
     public void parse_exactlyMaxWords_success() {
         String note = "word ".repeat(NoteAddCommandParser.MAX_WORD_COUNT).trim();
-        assertParseSuccess(parser, "1: " + note,
+        assertParseSuccess(parser, "1 note/" + note,
                 new NoteAddCommand(INDEX_FIRST_PERSON, note));
     }
 
@@ -49,7 +49,7 @@ public class NoteAddCommandParserTest {
     @Test
     public void parse_emptyNoteText_throwsParseException() {
         // Separator present but nothing after it
-        assertParseFailure(parser, "1: ", INVALID_FORMAT_MESSAGE);
+        assertParseFailure(parser, "1 note/", INVALID_FORMAT_MESSAGE);
     }
 
     @Test
@@ -59,9 +59,9 @@ public class NoteAddCommandParserTest {
 
     @Test
     public void parse_invalidIndex_throwsParseException() {
-        assertParseFailure(parser, "0: Some note", INVALID_FORMAT_MESSAGE);
-        assertParseFailure(parser, "-1: Some note", INVALID_FORMAT_MESSAGE);
-        assertParseFailure(parser, "abc: Some note", INVALID_FORMAT_MESSAGE);
+        assertParseFailure(parser, "0 note/Some note", INVALID_FORMAT_MESSAGE);
+        assertParseFailure(parser, "-1 note/Some note", INVALID_FORMAT_MESSAGE);
+        assertParseFailure(parser, "abc note/Some note", INVALID_FORMAT_MESSAGE);
     }
 
     @Test
