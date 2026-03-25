@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTE;
 
 import java.util.List;
 
@@ -8,6 +9,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.parser.NoteAddCommandParser;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
@@ -20,8 +22,8 @@ public class NoteAddCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds a note to the person identified by the index number used in the displayed person list.\n"
-            + "Parameters: INDEX: NOTE_TEXT (max 100 words)\n"
-            + "Example: " + COMMAND_WORD + " 1: Met at career fair";
+            + "Parameters: INDEX " + PREFIX_NOTE + "NOTE (max 200 words)\n"
+            + "Example: " + COMMAND_WORD + " 1 " + PREFIX_NOTE + "Met at career fair";
 
     public static final String MESSAGE_ADD_NOTE_SUCCESS = "Added note to Person: %1$s";
     public static final String MESSAGE_INVALID_PERSON = "The person index provided is invalid.";
@@ -54,11 +56,18 @@ public class NoteAddCommand extends Command {
         if (note.trim().isEmpty()) {
             throw new CommandException("Note cannot be empty.");
         }
-        if (note.trim().split("\\s+").length > 100) {
-            throw new CommandException("Note cannot exceed 100 words.");
+        if (note.trim().split("\\s+").length > 200) {
+            throw new CommandException(NoteAddCommandParser.MESSAGE_WORD_LIMIT_EXCEEDED);
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
+        String existingNote = personToEdit.getNotes().orElse("");
+        String updatedNote = existingNote.isEmpty()
+                ? note.trim()
+                : existingNote + "\n" + note.trim();
+        if (updatedNote.split("\\s+").length > NoteAddCommandParser.MAX_WORD_COUNT) {
+            throw new CommandException(NoteAddCommandParser.MESSAGE_WORD_LIMIT_EXCEEDED);
+        }
         Person editedPerson = new Person(
                 personToEdit.getName(),
                 personToEdit.getPhone(),
@@ -66,7 +75,7 @@ public class NoteAddCommand extends Command {
                 personToEdit.getAddress(),
                 personToEdit.getTags(),
                 personToEdit.getFollowUpDate(),
-                java.util.Optional.of(note.trim()),
+                java.util.Optional.of(updatedNote),
                 personToEdit.getCircle()
         );
 

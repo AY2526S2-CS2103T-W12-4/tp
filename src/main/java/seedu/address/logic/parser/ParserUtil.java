@@ -11,6 +11,7 @@ import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
@@ -120,5 +121,21 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
+    }
+
+    /**
+     * Parses a {@code String} into a {@code FollowUpDate}.
+     *
+     * @throws ParseException if the given {@code String} is invalid.
+     */
+    public static FollowUpDate parseFollowUpDate(String date) throws ParseException {
+        requireNonNull(date);
+        String trimmedDate = date.trim();
+
+        if (!FollowUpDate.isValidFollowUpDate(trimmedDate)) {
+            throw new ParseException(FollowUpDate.MESSAGE_CONSTRAINTS);
+        }
+
+        return new FollowUpDate(trimmedDate);
     }
 }
