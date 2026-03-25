@@ -10,6 +10,9 @@ import java.util.regex.Pattern;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.CircleAddCommand;
+import seedu.address.logic.commands.CircleFilterCommand;
+import seedu.address.logic.commands.CircleRemoveCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.DeleteCommand;
@@ -88,10 +91,13 @@ public class AddressBookParser {
 
         case TagRemoveCommand.COMMAND_WORD:
             return new TagRemoveCommandParser().parse(arguments);
+
         case ViewCommand.COMMAND_WORD:
             return new ViewCommandParser().parse(arguments);
+
         case NoteAddCommand.COMMAND_WORD:
             return new NoteAddCommandParser().parse(arguments);
+
         case NoteClearCommand.COMMAND_WORD:
             try {
                 return new NoteClearCommand(ParserUtil.parseIndex(arguments.trim()));
@@ -100,6 +106,15 @@ public class AddressBookParser {
                         String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT,
                                 NoteClearCommand.MESSAGE_USAGE), pe);
             }
+
+        case CircleAddCommand.COMMAND_WORD:
+            return new CircleAddCommandParser().parse(arguments);
+
+        case CircleRemoveCommand.COMMAND_WORD:
+            return new CircleRemoveCommandParser().parse(arguments);
+
+        case CircleFilterCommand.COMMAND_WORD:
+            return new CircleFilterCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);
