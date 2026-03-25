@@ -25,8 +25,6 @@ import seedu.address.logic.commands.NoteAddCommand;
 import seedu.address.logic.commands.NoteClearCommand;
 import seedu.address.logic.commands.RemindCommand;
 import seedu.address.logic.commands.SetFollowUpCommand;
-import seedu.address.logic.commands.RemindCommand;
-import seedu.address.logic.commands.SetFollowUpCommand;
 import seedu.address.logic.commands.TagAddCommand;
 import seedu.address.logic.commands.TagRemoveCommand;
 import seedu.address.logic.commands.ViewCommand;
