@@ -27,14 +27,12 @@ public class CircleFilterCommandParser implements Parser<CircleFilterCommand> {
                 CircleFilterCommand.MESSAGE_USAGE));
         }
 
-        // Ensure exactly one argument (no extra tokens)
         String[] splitArgs = trimmedArgs.split("\\s+");
         if (splitArgs.length != 1) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 CircleFilterCommand.MESSAGE_USAGE));
         }
 
-        // Validate circle name
         if (!Circle.isValidCircleName(trimmedArgs)) {
             throw new ParseException(Circle.MESSAGE_CONSTRAINTS);
         }

@@ -27,14 +27,12 @@ public class CircleRemoveCommandParser implements Parser<CircleRemoveCommand> {
                 CircleRemoveCommand.MESSAGE_USAGE));
         }
 
-        // Ensure exactly one argument (no extra tokens like a second index)
         String[] splitArgs = trimmedArgs.split("\\s+");
         if (splitArgs.length != 1) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 CircleRemoveCommand.MESSAGE_USAGE));
         }
 
-        // Parse and validate index
         try {
             Index index = ParserUtil.parseIndex(trimmedArgs);
             return new CircleRemoveCommand(index);

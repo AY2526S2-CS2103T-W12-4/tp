@@ -2,7 +2,6 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_CIRCLE;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.CircleAddCommand;
@@ -22,19 +21,16 @@ public class CircleAddCommandParser implements Parser<CircleAddCommand> {
      */
     public CircleAddCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_CIRCLE);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, CliSyntax.PREFIX_CIRCLE);
 
-        // Ensure the circle prefix is present
-        if (!argMultimap.getValue(PREFIX_CIRCLE).isPresent()
+        argMultimap.verifyNoDuplicatePrefixesFor(CliSyntax.PREFIX_CIRCLE);
+
+        if (argMultimap.getValue(CliSyntax.PREFIX_CIRCLE).isEmpty()
             || argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 CircleAddCommand.MESSAGE_USAGE));
         }
 
-        // Ensure no duplicate prefixes
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_CIRCLE);
-
-        // Parse index
         Index index;
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
@@ -43,8 +39,7 @@ public class CircleAddCommandParser implements Parser<CircleAddCommand> {
                 CircleAddCommand.MESSAGE_USAGE), pe);
         }
 
-        // Parse and validate circle name
-        String circleName = argMultimap.getValue(PREFIX_CIRCLE).get().trim();
+        String circleName = argMultimap.getValue(CliSyntax.PREFIX_CIRCLE).get().trim();
         if (!Circle.isValidCircleName(circleName)) {
             throw new ParseException(Circle.MESSAGE_CONSTRAINTS);
         }
