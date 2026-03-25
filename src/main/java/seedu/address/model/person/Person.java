@@ -2,7 +2,6 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -26,14 +25,15 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
-    private final Optional<LocalDate> followUpDate;
+    private final Optional<FollowUpDate> followUpDate;
     private final Optional<String> notes;
     private final Optional<String> circle;
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Optional<LocalDate> followUpDate,
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags,
+                  Optional<FollowUpDate> followUpDate,
                   Optional<String> notes, Optional<String> circle) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
@@ -62,7 +62,7 @@ public class Person {
         return address;
     }
 
-    public Optional<LocalDate> getFollowUpDate() {
+    public Optional<FollowUpDate> getFollowUpDate() {
         return followUpDate;
     }
 
@@ -169,7 +169,6 @@ public class Person {
 
     @Override
     public int hashCode() {
-        // use this method for custom fields hashing instead of implementing your own
         return Objects.hash(name, phone, email, address, tags, followUpDate, notes, circle);
     }
 

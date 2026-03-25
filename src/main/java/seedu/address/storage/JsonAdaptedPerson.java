@@ -1,7 +1,5 @@
 package seedu.address.storage;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -40,10 +39,14 @@ class JsonAdaptedPerson {
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
      */
     @JsonCreator
-    public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
-            @JsonProperty("email") String email, @JsonProperty("address") String address,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("followUpDate") String followUpDate,
-            @JsonProperty("notes") String notes, @JsonProperty("circle") String circle) {
+    public JsonAdaptedPerson(@JsonProperty("name") String name,
+                             @JsonProperty("phone") String phone,
+                             @JsonProperty("email") String email,
+                             @JsonProperty("address") String address,
+                             @JsonProperty("tags") List<JsonAdaptedTag> tags,
+                             @JsonProperty("followUpDate") String followUpDate,
+                             @JsonProperty("notes") String notes,
+                             @JsonProperty("circle") String circle) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -68,7 +71,7 @@ class JsonAdaptedPerson {
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
         followUpDate = source.getFollowUpDate()
-                .map(LocalDate::toString)
+                .map(FollowUpDate::toString)
                 .orElse(null);
         notes = source.getNotes()
                 .orElse(null);
@@ -121,13 +124,14 @@ class JsonAdaptedPerson {
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
 
-        Optional<LocalDate> modelFollowUpDate = Optional.empty();
-        if (followUpDate != null) {
-            try {
-                modelFollowUpDate = Optional.of(LocalDate.parse(followUpDate));
-            } catch (DateTimeParseException e) {
-                throw new IllegalValueException("Invalid follow-up date format. Use YYYY-MM-DD.");
+        final Optional<FollowUpDate> modelFollowUpDate;
+        if (followUpDate == null) {
+            modelFollowUpDate = Optional.empty();
+        } else {
+            if (!FollowUpDate.isValidFollowUpDate(followUpDate)) {
+                throw new IllegalValueException(FollowUpDate.MESSAGE_CONSTRAINTS);
             }
+            modelFollowUpDate = Optional.of(new FollowUpDate(followUpDate));
         }
 
         Optional<String> modelNotes = Optional.ofNullable(notes);

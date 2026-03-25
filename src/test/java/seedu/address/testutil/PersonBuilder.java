@@ -6,6 +6,7 @@ import java.util.Set;
 
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -27,6 +28,9 @@ public class PersonBuilder {
     private Email email;
     private Address address;
     private Set<Tag> tags;
+    private Optional<FollowUpDate> followUpDate;
+    private Optional<String> notes;
+    private Optional<String> circle;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -37,6 +41,9 @@ public class PersonBuilder {
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
+        followUpDate = Optional.empty();
+        notes = Optional.empty();
+        circle = Optional.empty();
     }
 
     /**
@@ -48,6 +55,9 @@ public class PersonBuilder {
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
+        followUpDate = personToCopy.getFollowUpDate();
+        notes = personToCopy.getNotes();
+        circle = personToCopy.getCircle();
     }
 
     /**
@@ -91,15 +101,21 @@ public class PersonBuilder {
     }
 
     /**
+     * Sets the {@code FollowUpDate} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withFollowUpDate(String followUpDate) {
+        this.followUpDate = Optional.of(new FollowUpDate(followUpDate));
+        return this;
+    }
+
+    /**
      * Builds and returns a {@code Person} with the current fields.
-     * Optional fields {@code followUpDate}, {@code notes}, and {@code circle}
-     * are set to {@code Optional.empty()} by default.
      *
      * @return a {@code Person} with the specified fields
      */
     public Person build() {
         return new Person(name, phone, email, address, tags,
-                Optional.empty(), Optional.empty(), Optional.empty());
+                followUpDate, notes, circle);
     }
 
 }

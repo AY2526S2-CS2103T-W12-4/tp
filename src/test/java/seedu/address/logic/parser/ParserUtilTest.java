@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
@@ -44,15 +45,12 @@ public class ParserUtilTest {
     @Test
     public void parseIndex_outOfRangeInput_throwsParseException() {
         assertThrows(ParseException.class, MESSAGE_INVALID_INDEX, ()
-            -> ParserUtil.parseIndex(Long.toString(Integer.MAX_VALUE + 1)));
+                -> ParserUtil.parseIndex(Long.toString(Integer.MAX_VALUE + 1)));
     }
 
     @Test
     public void parseIndex_validInput_success() throws Exception {
-        // No whitespaces
         assertEquals(INDEX_FIRST_PERSON, ParserUtil.parseIndex("1"));
-
-        // Leading and trailing whitespaces
         assertEquals(INDEX_FIRST_PERSON, ParserUtil.parseIndex("  1  "));
     }
 
@@ -189,8 +187,30 @@ public class ParserUtilTest {
     @Test
     public void parseTags_collectionWithValidTags_returnsTagSet() throws Exception {
         Set<Tag> actualTagSet = ParserUtil.parseTags(Arrays.asList(VALID_TAG_1, VALID_TAG_2));
-        Set<Tag> expectedTagSet = new HashSet<Tag>(Arrays.asList(new Tag(VALID_TAG_1), new Tag(VALID_TAG_2)));
+        Set<Tag> expectedTagSet = new HashSet<>(Arrays.asList(new Tag(VALID_TAG_1), new Tag(VALID_TAG_2)));
 
         assertEquals(expectedTagSet, actualTagSet);
+    }
+
+    @Test
+    public void parseFollowUpDate_validValue_returnsFollowUpDate() throws Exception {
+        assertEquals(new FollowUpDate("2099-12-31"), ParserUtil.parseFollowUpDate("2099-12-31"));
+        assertEquals(new FollowUpDate("2099-12-31"), ParserUtil.parseFollowUpDate(" 2099-12-31 "));
+    }
+
+    @Test
+    public void parseFollowUpDate_invalidValue_throwsParseException() {
+        String expectedMessage = FollowUpDate.MESSAGE_CONSTRAINTS;
+        assertThrows(ParseException.class, expectedMessage, () -> {
+            ParserUtil.parseFollowUpDate("abc");
+        });
+    }
+
+    @Test
+    public void parseFollowUpDate_pastDate_throwsParseException() {
+        String expectedMessage = FollowUpDate.MESSAGE_CONSTRAINTS;
+        assertThrows(ParseException.class, expectedMessage, () -> {
+            ParserUtil.parseFollowUpDate("2020-01-01");
+        });
     }
 }

@@ -1,6 +1,8 @@
 package seedu.address.logic.parser;
 
+import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTE;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.NoteAddCommand;
@@ -8,8 +10,8 @@ import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
  * Parses input arguments and creates a new NoteAddCommand object.
- * Expected format: INDEX: NOTE_TEXT
- * e.g. note/1: Met at career fair
+ * Expected format: INDEX note/NOTE_TEXT
+ * Example: 1 note/Looking for family coverage
  */
 public class NoteAddCommandParser implements Parser<NoteAddCommand> {
 
@@ -19,40 +21,36 @@ public class NoteAddCommandParser implements Parser<NoteAddCommand> {
 
     @Override
     public NoteAddCommand parse(String args) throws ParseException {
-        if (args == null) {
+        requireNonNull(args);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NOTE);
+
+        // Validate index
+        Index index;
+        try {
+            index = ParserUtil.parseIndex(argMultimap.getPreamble());
+        } catch (ParseException pe) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteAddCommand.MESSAGE_USAGE), pe);
+        }
+
+        // Validate note/ prefix is present
+        if (argMultimap.getValue(PREFIX_NOTE).isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteAddCommand.MESSAGE_USAGE));
         }
-        String trimmed = args.trim();
 
-        int separatorIndex = trimmed.indexOf(": ");
-        if (separatorIndex <= 0) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteAddCommand.MESSAGE_USAGE));
-        }
+        String noteText = argMultimap.getValue(PREFIX_NOTE).get().trim();
 
-        String indexPart = trimmed.substring(0, separatorIndex).trim();
-        String noteText = trimmed.substring(separatorIndex + 2).trim();
-
+        // Validate note is not empty
         if (noteText.isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteAddCommand.MESSAGE_USAGE));
         }
 
-        String[] words = noteText.split("\\s+");
-        if (words.length == 0 || (words.length == 1 && words[0].isEmpty())) {
-            throw new ParseException("Note text cannot be empty.");
-        }
-        if (words.length > MAX_WORD_COUNT) {
+        // Validate word count of the new input alone
+        // (combined total is validated inside NoteAddCommand.execute())
+        if (noteText.split("\\s+").length > MAX_WORD_COUNT) {
             throw new ParseException(MESSAGE_WORD_LIMIT_EXCEEDED);
-        }
-
-        Index index;
-        try {
-            index = ParserUtil.parseIndex(indexPart);
-        } catch (ParseException pe) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteAddCommand.MESSAGE_USAGE), pe);
         }
 
         return new NoteAddCommand(index, noteText);

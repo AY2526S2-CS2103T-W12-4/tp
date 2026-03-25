@@ -74,7 +74,7 @@ public class NoteClearCommand extends Command {
         boolean hadNote = personToEdit.getNotes().isPresent();
         String message = hadNote
                 ? String.format(MESSAGE_CLEAR_NOTE_SUCCESS, Messages.format(editedPerson))
-                : "No note to clear for index " + Messages.format(editedPerson);
+                : "No note to clear for " + Messages.format(editedPerson);
         return new CommandResult(message);
     }
 
