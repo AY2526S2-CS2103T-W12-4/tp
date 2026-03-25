@@ -20,6 +20,7 @@ import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.NoteAddCommand;
 import seedu.address.logic.commands.NoteClearCommand;
+import seedu.address.logic.commands.RemindCommand;
 import seedu.address.logic.commands.SetFollowUpCommand;
 import seedu.address.logic.commands.TagAddCommand;
 import seedu.address.logic.commands.TagRemoveCommand;
@@ -95,6 +96,9 @@ public class AddressBookParser {
             return new NoteAddCommandParser().parse(arguments);
         case SetFollowUpCommand.COMMAND_WORD:
             return new SetFollowUpCommandParser().parse(arguments);
+
+        case RemindCommand.COMMAND_WORD:
+            return new RemindCommandParser().parse(arguments);
         case NoteClearCommand.COMMAND_WORD:
             try {
                 return new NoteClearCommand(ParserUtil.parseIndex(arguments.trim()));

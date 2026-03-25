@@ -23,6 +23,7 @@ import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.RemindCommand;
 import seedu.address.logic.commands.SetFollowUpCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.FollowUpDate;
@@ -109,5 +110,12 @@ public class AddressBookParserTest {
         SetFollowUpCommand command = (SetFollowUpCommand) parser.parseCommand(
                 SetFollowUpCommand.COMMAND_WORD + " 1 d/2099-12-31");
         assertEquals(new SetFollowUpCommand(Index.fromOneBased(1), new FollowUpDate("2099-12-31")), command);
+    }
+
+    @Test
+    public void parseCommand_remind() throws Exception {
+        RemindCommand command = (RemindCommand) parser.parseCommand(
+                RemindCommand.COMMAND_WORD + " 3");
+        assertEquals(new RemindCommand(3), command);
     }
 }
