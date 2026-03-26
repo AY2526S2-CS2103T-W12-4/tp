@@ -9,6 +9,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -32,7 +33,7 @@ public class TagAddCommandTest {
 
         TagAddCommand command = new TagAddCommand(tag, index);
         String expectedMessage = String.format(
-                TagAddCommand.MESSAGE_TAG_PERSON_SUCCESS, tag.tagName, taggedPerson.getName());
+                TagAddCommand.MESSAGE_ADD_TAG_SUCCESS, tag.tagName, taggedPerson.getName());
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
@@ -46,7 +47,7 @@ public class TagAddCommandTest {
         TagAddCommand command = new TagAddCommand(tag, outOfBoundIndex);
 
         assertThrows(CommandException.class,
-                TagAddCommand.MESSAGE_INVALID_PERSON, () -> command.execute(model));
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, () -> command.execute(model));
     }
 
     @Test
@@ -61,7 +62,7 @@ public class TagAddCommandTest {
         TagAddCommand command = new TagAddCommand(existingTag, index);
 
         assertThrows(CommandException.class,
-                TagAddCommand.MESSAGE_TAG_PERSON_FAILURE, () -> command.execute(model));
+                TagAddCommand.MESSAGE_ADD_TAG_FAILURE, () -> command.execute(model));
     }
 
     @Test
@@ -92,7 +93,7 @@ public class TagAddCommandTest {
 
         TagAddCommand command = new TagAddCommand(newTag, lastIndex);
         String expectedMessage = String.format(
-                TagAddCommand.MESSAGE_TAG_PERSON_SUCCESS, newTag.tagName, taggedPerson.getName());
+                TagAddCommand.MESSAGE_ADD_TAG_SUCCESS, newTag.tagName, taggedPerson.getName());
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
