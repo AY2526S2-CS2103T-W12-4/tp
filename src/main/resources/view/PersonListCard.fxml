@@ -49,8 +49,6 @@
 
   <VBox alignment="CENTER_LEFT" spacing="8" prefWidth="420" minWidth="420">
     <Label fx:id="address" text="Address" styleClass="person-address-label" wrapText="true" />
-    <HBox fx:id="notesRow" alignment="CENTER_LEFT" spacing="6" visible="false" managed="false">
-    </HBox>
   </VBox>
 
   <Region HBox.hgrow="ALWAYS" />
