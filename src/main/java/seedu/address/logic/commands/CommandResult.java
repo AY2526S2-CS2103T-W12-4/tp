@@ -19,15 +19,17 @@ public class CommandResult {
     /** The application should exit. */
     private final boolean exit;
 
-    private final boolean showNotes;
+    /** The application should go into view mode. */
+    private final boolean viewMode;
+
     /**
      * Constructs a {@code CommandResult} with the specified fields.
      */
-    public CommandResult(String feedbackToUser, boolean showHelp, boolean exit, boolean showNotes) {
+    public CommandResult(String feedbackToUser, boolean showHelp, boolean exit, boolean viewMode) {
         this.feedbackToUser = requireNonNull(feedbackToUser);
         this.showHelp = showHelp;
         this.exit = exit;
-        this.showNotes = showNotes;
+        this.viewMode = viewMode;
     }
 
     /**
@@ -50,8 +52,8 @@ public class CommandResult {
         return exit;
     }
 
-    public boolean isShowNotes() {
-        return showNotes;
+    public boolean isViewMode() {
+        return viewMode;
     }
 
     @Override

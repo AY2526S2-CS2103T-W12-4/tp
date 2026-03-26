@@ -214,7 +214,7 @@ public class MainWindow extends UiPart<Stage> {
                 handleExit();
             }
 
-            if (commandResult.isShowNotes()) {
+            if (commandResult.isViewMode()) {
                 handleViewPerson();
             } else {
                 clearDetailPanel();
