@@ -9,7 +9,9 @@ Keeping in touch with your friends and clients should be **easy and efficient**.
 FAM is a **desktop contact management app** built for student financial advisors. It helps you track your relationships, 
 log interactions and schedule follow-ups in one place.
 
-FAM is optimized for use via a **Command Line Interface (CLI)**. So if you type fast, you can manage your contacts **significantly faster** with FAM than with traditional apps. A **Graphical User Interface (GUI)** is provided too, so that you can have the best of both worlds. 
+FAM is optimized for use via a **Command Line Interface (CLI)**. So if you type fast, you can manage your contacts **significantly faster** with FAM than with traditional apps. 
+
+A **Graphical User Interface (GUI)** is provided too, so that you can have the best of both worlds. 
 
 ### Table Of Contents 
 * [Quick start](#quick-start)
@@ -28,7 +30,7 @@ FAM is optimized for use via a **Command Line Interface (CLI)**. So if you type 
     * [Circle Add](#add-a-circle-to-a-person--circleadd)
     * [Circle Remove](#removing-a-circle-to-a-person--circlerm)
     * [Circle Filter](#filtering-circle--circlefilter)
-    * [Follow Up](#setting-follow-up-date--followup)
+    * [Follow Up Date](#setting-follow-up-date--followup)
     * [Clear](#clearing-all-entries--clear)
     * [Exit](#exiting-the-program--exit)
 * [FAQ](#faq)
@@ -162,8 +164,8 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 
 Examples:
 * `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find david irfan` returns `David Li`, `Irfan Ibrahim`<br><br>
+  ![result for 'find david irfan'](images/findDavidIrfanResult.png)
 
 
 ### Viewing a person : `view`
@@ -273,7 +275,7 @@ Examples:
 * `circleadd 3 c/family` will lead to an error message as `family` is not an accepted circle type.
 
 
-### Removing a circle to a person : `circlerm`
+### Remove a circle from a person : `circlerm`
 
 Removes a circle from an existing person in the address book.
 Circle here referring to the type of relationship user have with the contact.
@@ -290,7 +292,7 @@ Examples:
 * `circlerm 1` removes the circle from the 1st person in the address book, regardless of the circle.
 
 
-### Filtering Circle : `circlefilter`
+### Filter for a circle : `circlefilter`
 
 Filters and shows all contacts in the address book with the specified circle.
 Circle here referring to the type of relationship user have with the contact.
@@ -309,7 +311,7 @@ Examples:
 * `circlefilter client` shows all contacts with the circle `client` in the address book, in their index order in the address book.
 * `circlefilter family` will lead to an error message as `family` is not an accepted circle type.
 
-### Setting Follow-Up Date : followup
+### Setting follow-up date : `followup`
 
 Sets (or updates) a follow-up date for a contact.
 A follow-up date helps you track when you should check in with a contact.
