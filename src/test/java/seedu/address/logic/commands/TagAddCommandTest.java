@@ -1,5 +1,6 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -66,17 +67,9 @@ public class TagAddCommandTest {
     }
 
     @Test
-    public void execute_invalidTagFormat_throwsCommandException() {
-        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        Index index = Index.fromOneBased(1);
-
-        // Tag with invalid characters (uppercase letters not matching a-z0-9-)
-        Tag invalidTag = new Tag("INVALID");
-
-        TagAddCommand command = new TagAddCommand(invalidTag, index);
-
-        assertThrows(CommandException.class,
-                TagAddCommand.MESSAGE_INVALID_TAG, () -> command.execute(model));
+    public void constructor_uppercaseTag_convertsToLowercase() {
+        Tag tag = new Tag("INVALID");
+        assertEquals("invalid", tag.tagName);
     }
 
     @Test
