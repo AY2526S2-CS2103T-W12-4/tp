@@ -396,7 +396,7 @@ Action | Format, Examples
 **View** | `view INDEX`<br> e.g., `view 3`
 **Tag Add** | `tagadd INDEX t/TAG`<br> e.g., `tagadd 1 t/friend`
 **Tag Remove** | `tagrm INDEX t/TAG`<br> e.g., `tagrm 1 t/friend`
-**Note Add** | `note INDEX: NOTE`<br> e.g., `note 1: looking for student coverage`
+**Note Add** | `note INDEX note/NOTE`<br> e.g., `note 1 note/looking for student coverage`
 **Note Clear** | `noteclear INDEX`<br> e.g., `noteclear 1`
 **Circle Add** | `circleadd INDEX c/CIRCLE`<br> e.g., `circleadd 1 c/client`
 **Circle Remove** | `circlerm INDEX`<br> e.g., `circlerm 1`
