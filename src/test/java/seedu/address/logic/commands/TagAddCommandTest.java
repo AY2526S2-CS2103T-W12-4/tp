@@ -1,5 +1,6 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -9,6 +10,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -32,7 +34,7 @@ public class TagAddCommandTest {
 
         TagAddCommand command = new TagAddCommand(tag, index);
         String expectedMessage = String.format(
-                TagAddCommand.MESSAGE_TAG_PERSON_SUCCESS, tag.tagName, taggedPerson.getName());
+                TagAddCommand.MESSAGE_ADD_TAG_SUCCESS, tag.tagName, taggedPerson.getName());
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
@@ -46,7 +48,7 @@ public class TagAddCommandTest {
         TagAddCommand command = new TagAddCommand(tag, outOfBoundIndex);
 
         assertThrows(CommandException.class,
-                TagAddCommand.MESSAGE_INVALID_PERSON, () -> command.execute(model));
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, () -> command.execute(model));
     }
 
     @Test
@@ -61,21 +63,13 @@ public class TagAddCommandTest {
         TagAddCommand command = new TagAddCommand(existingTag, index);
 
         assertThrows(CommandException.class,
-                TagAddCommand.MESSAGE_TAG_PERSON_FAILURE, () -> command.execute(model));
+                TagAddCommand.MESSAGE_ADD_TAG_FAILURE, () -> command.execute(model));
     }
 
     @Test
-    public void execute_invalidTagFormat_throwsCommandException() {
-        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        Index index = Index.fromOneBased(1);
-
-        // Tag with invalid characters (uppercase letters not matching a-z0-9-)
-        Tag invalidTag = new Tag("INVALID");
-
-        TagAddCommand command = new TagAddCommand(invalidTag, index);
-
-        assertThrows(CommandException.class,
-                TagAddCommand.MESSAGE_INVALID_TAG, () -> command.execute(model));
+    public void constructor_uppercaseTag_convertsToLowercase() {
+        Tag tag = new Tag("INVALID");
+        assertEquals("invalid", tag.tagName);
     }
 
     @Test
@@ -92,7 +86,7 @@ public class TagAddCommandTest {
 
         TagAddCommand command = new TagAddCommand(newTag, lastIndex);
         String expectedMessage = String.format(
-                TagAddCommand.MESSAGE_TAG_PERSON_SUCCESS, newTag.tagName, taggedPerson.getName());
+                TagAddCommand.MESSAGE_ADD_TAG_SUCCESS, newTag.tagName, taggedPerson.getName());
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }

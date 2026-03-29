@@ -9,6 +9,7 @@ import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -22,13 +23,12 @@ import seedu.address.model.tag.Tag;
 public class TagAddCommand extends Command {
     public static final String COMMAND_WORD = "tagadd";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a tag to a contact in the address book.\n"
-        + "Parameters: INDEX " + PREFIX_TAG + "TAG\n"
+        + "Parameters: INDEX (must be a positive integer) " + PREFIX_TAG + "TAG\n"
         + "Example: " + COMMAND_WORD + " 1 " + PREFIX_TAG + "classmate";
 
-    public static final String MESSAGE_TAG_PERSON_SUCCESS = "Added tag '%1$s' to %2$s";
-    public static final String MESSAGE_TAG_PERSON_FAILURE = "Invalid value: tag already exists for this contact.";
-    public static final String MESSAGE_INVALID_PERSON = "The person does not exist in the address book.";
-    public static final String MESSAGE_INVALID_TAG = "Invalid value: tag must be 1–20 chars (a-z,0-9,-).";
+    public static final String MESSAGE_ADD_TAG_SUCCESS = "Added tag '%1$s' to %2$s";
+    public static final String MESSAGE_ADD_TAG_FAILURE = "This tag already exists for this contact.";
+    public static final String MESSAGE_INVALID_TAG = "Tag must be 1–20 characters (a-z, 0-9, hyphens).";
 
     /** The tag to be added to the contact. */
     private final Tag tag;
@@ -36,14 +36,15 @@ public class TagAddCommand extends Command {
     /** The index of the contact in the filtered person list. */
     private final Index index;
 
-
     /**
-     * Constructs a TagAddCommand to add a tag to a contact.
+     * Creates a TagAddCommand to add a tag to a contact.
      *
      * @param tag the tag to be added
      * @param index the index of the contact in the filtered person list
      */
     public TagAddCommand(Tag tag, Index index) {
+        requireNonNull(tag);
+        requireNonNull(index);
         this.tag = tag;
         this.index = index;
     }
@@ -53,18 +54,14 @@ public class TagAddCommand extends Command {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
-        if (index.getZeroBased() >= lastShownList.size() || index.getOneBased() <= 0) {
-            throw new CommandException(MESSAGE_INVALID_PERSON);
+        if (index.getZeroBased() >= lastShownList.size()) {
+            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         Person personAtIndex = lastShownList.get(index.getZeroBased());
 
-        if (!tag.tagName.matches("[a-z0-9\\-]{1,20}")) {
-            throw new CommandException(MESSAGE_INVALID_TAG);
-        }
-
         if (personAtIndex.getTags().stream().anyMatch(t -> t.tagName.equals(tag.tagName))) {
-            throw new CommandException(MESSAGE_TAG_PERSON_FAILURE);
+            throw new CommandException(MESSAGE_ADD_TAG_FAILURE);
         }
 
         Set<Tag> updatedTags = new HashSet<>(personAtIndex.getTags());
@@ -83,7 +80,7 @@ public class TagAddCommand extends Command {
 
         model.setPerson(personAtIndex, editedPerson);
 
-        return new CommandResult(String.format(MESSAGE_TAG_PERSON_SUCCESS, tag.tagName, editedPerson.getName()));
+        return new CommandResult(String.format(MESSAGE_ADD_TAG_SUCCESS, tag.tagName, editedPerson.getName()));
     }
 
     @Override

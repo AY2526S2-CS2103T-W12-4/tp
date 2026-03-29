@@ -8,6 +8,7 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailur
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.TagRemoveCommand;
 import seedu.address.model.Model;
@@ -56,7 +57,7 @@ public class TagRemoveCommandParserTest {
 
         TagRemoveCommand command = new TagRemoveCommand(tag, outOfBoundIndex);
 
-        assertCommandFailure(command, model, TagRemoveCommand.MESSAGE_INVALID_PERSON);
+        assertCommandFailure(command, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
