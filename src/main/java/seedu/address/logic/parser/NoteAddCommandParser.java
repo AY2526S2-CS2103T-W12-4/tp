@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTE;
+import static seedu.address.model.person.Note.MESSAGE_CONSTRAINTS;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.NoteAddCommand;
@@ -41,7 +42,7 @@ public class NoteAddCommandParser implements Parser<NoteAddCommand> {
         // Validate note is not empty
         if (noteText.isEmpty()) {
             throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteAddCommand.MESSAGE_USAGE));
+                    String.format(MESSAGE_CONSTRAINTS, NoteAddCommand.MESSAGE_USAGE));
         }
 
         // Validate the word count of the new input is note greater than 200
