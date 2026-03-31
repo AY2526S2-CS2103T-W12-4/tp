@@ -199,3 +199,22 @@
     -fx-text-alignment: LEFT;
     -fx-text-overrun: ellipsis;
 }
+
+/* View-specific styles */
+.view-text {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 15px;
+}
+
+.view-title {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.view-email-text {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 15px;
+    -fx-text-fill: #0b63ce;
+    -fx-underline: true;
+}

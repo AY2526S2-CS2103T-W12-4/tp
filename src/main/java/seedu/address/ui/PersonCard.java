@@ -102,7 +102,7 @@ public class PersonCard extends UiPart<Region> {
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
     }
 
-    private static void setShown(Node node, boolean shown) {
+    public static void setShown(Node node, boolean shown) {
         node.setVisible(shown);
         node.setManaged(shown);
     }
