@@ -161,7 +161,7 @@ public class CircleFilterCommandTest {
                     person.getTags(),
                     person.getFollowUpDate(),
                     person.getNotes(),
-                    Optional.of(new Circle ("client"))
+                    Optional.of(new Circle("client"))
                 );
                 modelCopy.setPerson(person, personWithCircle);
             }

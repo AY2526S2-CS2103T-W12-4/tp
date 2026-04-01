@@ -126,7 +126,7 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String} into a {@code FollowUpDate}.
+     * Parses a {@code String followupdate} into a {@code FollowUpDate}.
      *
      * @throws ParseException if the given {@code String} is invalid.
      */
@@ -147,7 +147,12 @@ public class ParserUtil {
         return followUpDate;
     }
 
-    public static Circle parseCircle(String circle) throws ParseException{
+    /**
+     * Parses a {@code String circle} into a {@code Circle}.
+     *
+     * @throws ParseException if the given {@code String} is invalid.
+     */
+    public static Circle parseCircle(String circle) throws ParseException {
         requireNonNull(circle);
         String trimmedCircle = circle.trim();
         if (!Circle.isValidCircleName(trimmedCircle)) {
