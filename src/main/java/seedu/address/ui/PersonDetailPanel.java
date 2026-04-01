@@ -69,7 +69,7 @@ public class PersonDetailPanel extends UiPart<Region> {
         }
 
         person.getCircle().ifPresentOrElse(c -> {
-            String circle = c.trim().toLowerCase();
+            String circle = c.getCircleName().trim().toLowerCase();
             circleBadge.setText(circle);
             setShown(circleBadge, true);
 
