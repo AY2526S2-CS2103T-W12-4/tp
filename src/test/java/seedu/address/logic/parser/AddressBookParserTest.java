@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalCircles.FRIENDS;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import java.util.Arrays;
@@ -15,6 +16,9 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.CircleAddCommand;
+import seedu.address.logic.commands.CircleFilterCommand;
+import seedu.address.logic.commands.CircleRemoveCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
@@ -26,9 +30,11 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.RemindCommand;
 import seedu.address.logic.commands.SetFollowUpCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.circle.Circle;
 import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.UniquePersonList;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
@@ -55,7 +61,7 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_delete() throws Exception {
         DeleteCommand command = (DeleteCommand) parser.parseCommand(
-                DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
+            DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
         assertEquals(new DeleteCommand(INDEX_FIRST_PERSON, alwaysConfirm), command);
     }
 
@@ -64,7 +70,7 @@ public class AddressBookParserTest {
         Person person = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
+            + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
         assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
 
@@ -78,7 +84,7 @@ public class AddressBookParserTest {
     public void parseCommand_find() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
         FindCommand command = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
+            FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
         assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
     }
 
@@ -108,14 +114,38 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_followup() throws Exception {
         SetFollowUpCommand command = (SetFollowUpCommand) parser.parseCommand(
-                SetFollowUpCommand.COMMAND_WORD + " 1 d/2099-12-31");
+            SetFollowUpCommand.COMMAND_WORD + " 1 d/2099-12-31");
         assertEquals(new SetFollowUpCommand(Index.fromOneBased(1), new FollowUpDate("2099-12-31")), command);
     }
 
     @Test
     public void parseCommand_remind() throws Exception {
         RemindCommand command = (RemindCommand) parser.parseCommand(
-                RemindCommand.COMMAND_WORD + " 3");
+            RemindCommand.COMMAND_WORD + " 3");
         assertEquals(new RemindCommand(3), command);
     }
+
+    @Test
+    public void parseCommand_circleadd() throws Exception {
+        CircleAddCommand command = (CircleAddCommand) parser.parseCommand(
+            CircleAddCommand.COMMAND_WORD + " "
+                + INDEX_FIRST_PERSON.getOneBased() + " c/" + FRIENDS.circleName);
+        assertEquals(new CircleAddCommand(INDEX_FIRST_PERSON, FRIENDS), command);
+    }
+
+    @Test
+    public void parseCommand_circlerm() throws Exception {
+        CircleRemoveCommand command = (CircleRemoveCommand) parser.parseCommand(
+            CircleRemoveCommand.COMMAND_WORD + " "
+            + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new CircleRemoveCommand(INDEX_FIRST_PERSON), command);
+    }
+
+    @Test
+    public void parseCommand_circlefilter() throws Exception {
+        CircleFilterCommand command = (CircleFilterCommand) parser.parseCommand(
+            CircleFilterCommand.COMMAND_WORD + " " + FRIENDS.circleName);
+        assertEquals(new CircleFilterCommand(FRIENDS.circleName), command);
+    }
+
 }

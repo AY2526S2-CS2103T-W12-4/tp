@@ -50,6 +50,6 @@ public class CircleAddCommandParser implements Parser<CircleAddCommand> {
         }
 
         Circle circle = new Circle(circleName);
-        return new CircleAddCommand(circle, index);
+        return new CircleAddCommand(index, circle);
     }
 }

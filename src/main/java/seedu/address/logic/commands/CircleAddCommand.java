@@ -43,7 +43,7 @@ public class CircleAddCommand extends Command {
      * @param circle the circle to be added
      * @param index the index of the contact in the filtered person list
      */
-    public CircleAddCommand(Circle circle, Index index) {
+    public CircleAddCommand(Index index, Circle circle) {
         requireNonNull(circle);
         requireNonNull(index);
         this.circle = circle;
