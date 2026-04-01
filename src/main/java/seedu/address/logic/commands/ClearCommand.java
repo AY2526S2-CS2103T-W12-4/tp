@@ -16,7 +16,19 @@ public class ClearCommand extends Command {
 
     public static final String MESSAGE_CLEAR_SUCCESS = "Address book has been cleared!";
     public static final String MESSAGE_CLEAR_CANCELLED = "Clear cancelled.";
-    private final ConfirmationInterface confirmationInterface = ConfirmationDialog::showConfirmation;
+
+    private final ConfirmationInterface confirmationInterface;
+
+    /** Production constructor: uses real popup. */
+    public ClearCommand() {
+        this(ConfirmationDialog::showConfirmation);
+    }
+
+    /** Test constructor: inject stub confirmation (msg -> true/false). */
+    public ClearCommand(ConfirmationInterface confirmationInterface) {
+        requireNonNull(confirmationInterface);
+        this.confirmationInterface = confirmationInterface;
+    }
 
     @Override
     public CommandResult execute(Model model) {

@@ -13,20 +13,43 @@ import seedu.address.model.UserPrefs;
 public class ClearCommandTest {
 
     @Test
-    public void execute_emptyAddressBook_success() {
+    public void execute_emptyAddressBook_confirmed_success() {
         Model model = new ModelManager();
         Model expectedModel = new ModelManager();
 
-        assertCommandSuccess(new ClearCommand(), model, ClearCommand.MESSAGE_CLEAR_SUCCESS, expectedModel);
+        ClearCommand command = new ClearCommand(msg -> true);
+
+        assertCommandSuccess(command, model, ClearCommand.MESSAGE_CLEAR_SUCCESS, expectedModel);
     }
 
     @Test
-    public void execute_nonEmptyAddressBook_success() {
+    public void execute_emptyAddressBook_cancelled_success() {
+        Model model = new ModelManager();
+        Model expectedModel = new ModelManager();
+
+        ClearCommand command = new ClearCommand(msg -> false);
+
+        assertCommandSuccess(command, model, ClearCommand.MESSAGE_CLEAR_CANCELLED, expectedModel);
+    }
+
+    @Test
+    public void execute_nonEmptyAddressBook_confirmed_success() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         expectedModel.setAddressBook(new AddressBook());
 
-        assertCommandSuccess(new ClearCommand(), model, ClearCommand.MESSAGE_CLEAR_SUCCESS, expectedModel);
+        ClearCommand command = new ClearCommand(msg -> true);
+
+        assertCommandSuccess(command, model, ClearCommand.MESSAGE_CLEAR_SUCCESS, expectedModel);
     }
 
+    @Test
+    public void execute_nonEmptyAddressBook_cancelled_success() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+        ClearCommand command = new ClearCommand(msg -> false);
+
+        assertCommandSuccess(command, model, ClearCommand.MESSAGE_CLEAR_CANCELLED, expectedModel);
+    }
 }
