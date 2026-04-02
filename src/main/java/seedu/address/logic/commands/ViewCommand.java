@@ -69,7 +69,10 @@ public class ViewCommand extends Command {
         }
 
         Person personToView = lastShownList.get(targetIndex.getZeroBased());
-        Predicate<Person> predicate = p -> p.equals(personToView);
+
+        // Important: use identity comparison, not full equality.
+        // This keeps the viewed person visible even after tag/note/follow-up edits.
+        Predicate<Person> predicate = p -> p.isSamePerson(personToView);
         model.updateFilteredPersonList(predicate);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, personToView.getName()),

@@ -17,14 +17,16 @@ import seedu.address.model.tag.Tag;
 /**
  * Adds a tag to a contact in the address book.
  * The contact is identified by its index in the filtered person list.
- * The tag must be valid (1-20 characters, alphanumeric or hyphens) and not already exist for the contact.
+ * The tag must contain only lowercase letters, numbers, or hyphens,
+ * be between 1 and 20 characters long, and not already exist for the contact.
  */
 public class TagAddCommand extends Command {
     public static final String COMMAND_WORD = "tagadd";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a tag to a contact in the address book.\n"
         + "Parameters: INDEX " + PREFIX_TAG + "TAG\n"
         + "Example: " + COMMAND_WORD + " 1 " + PREFIX_TAG + "classmate";
-
+    public static final int MAX_TAGS_PER_PERSON = 5;
+    public static final String MESSAGE_TAG_LIMIT_REACHED = "A contact can have at most 5 tags.";
     public static final String MESSAGE_TAG_PERSON_SUCCESS = "Added tag '%1$s' to %2$s";
     public static final String MESSAGE_TAG_PERSON_FAILURE = "Invalid value: tag already exists for this contact.";
     public static final String MESSAGE_INVALID_PERSON = "The person does not exist in the address book.";
@@ -53,37 +55,38 @@ public class TagAddCommand extends Command {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
-        if (index.getZeroBased() >= lastShownList.size() || index.getOneBased() <= 0) {
+        if (index.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(MESSAGE_INVALID_PERSON);
         }
 
         Person personAtIndex = lastShownList.get(index.getZeroBased());
 
-        if (!tag.tagName.matches("[a-z0-9\\-]{1,20}")) {
-            throw new CommandException(MESSAGE_INVALID_TAG);
+        if (personAtIndex.getTags().contains(tag)) {
+            throw new CommandException(MESSAGE_TAG_PERSON_FAILURE);
         }
 
-        if (personAtIndex.getTags().stream().anyMatch(t -> t.tagName.equals(tag.tagName))) {
-            throw new CommandException(MESSAGE_TAG_PERSON_FAILURE);
+        if (personAtIndex.getTags().size() >= MAX_TAGS_PER_PERSON) {
+            throw new CommandException(MESSAGE_TAG_LIMIT_REACHED);
         }
 
         Set<Tag> updatedTags = new HashSet<>(personAtIndex.getTags());
         updatedTags.add(tag);
 
         Person editedPerson = new Person(
-            personAtIndex.getName(),
-            personAtIndex.getPhone(),
-            personAtIndex.getEmail(),
-            personAtIndex.getAddress(),
-            updatedTags,
-            personAtIndex.getFollowUpDate(),
-            personAtIndex.getNotes(),
-            personAtIndex.getCircle()
+                personAtIndex.getName(),
+                personAtIndex.getPhone(),
+                personAtIndex.getEmail(),
+                personAtIndex.getAddress(),
+                updatedTags,
+                personAtIndex.getFollowUpDate(),
+                personAtIndex.getNotes(),
+                personAtIndex.getCircle()
         );
 
         model.setPerson(personAtIndex, editedPerson);
 
-        return new CommandResult(String.format(MESSAGE_TAG_PERSON_SUCCESS, tag.tagName, editedPerson.getName()));
+        return new CommandResult(
+                String.format(MESSAGE_TAG_PERSON_SUCCESS, tag.tagName, editedPerson.getName()));
     }
 
     @Override

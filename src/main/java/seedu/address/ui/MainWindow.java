@@ -35,6 +35,7 @@ public class MainWindow extends UiPart<Stage> {
     private PersonListPanel personListPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
+    private boolean isInViewMode = false;
 
     @FXML
     private StackPane commandBoxPlaceholder;
@@ -60,13 +61,10 @@ public class MainWindow extends UiPart<Stage> {
     public MainWindow(Stage primaryStage, Logic logic) {
         super(FXML, primaryStage);
 
-        // Set dependencies
         this.primaryStage = primaryStage;
         this.logic = logic;
 
-        // Configure the UI
         setWindowDefaultSize(logic.getGuiSettings());
-
         setAccelerators();
 
         helpWindow = new HelpWindow();
@@ -87,21 +85,6 @@ public class MainWindow extends UiPart<Stage> {
     private void setAccelerator(MenuItem menuItem, KeyCombination keyCombination) {
         menuItem.setAccelerator(keyCombination);
 
-        /*
-         * TODO: the code below can be removed once the bug reported here
-         * https://bugs.openjdk.java.net/browse/JDK-8131666
-         * is fixed in later version of SDK.
-         *
-         * According to the bug report, TextInputControl (TextField, TextArea) will
-         * consume function-key events. Because CommandBox contains a TextField, and
-         * ResultDisplay contains a TextArea, thus some accelerators (e.g F1) will
-         * not work when the focus is in them because the key event is consumed by
-         * the TextInputControl(s).
-         *
-         * For now, we add following event filter to capture such key events and open
-         * help window purposely so to support accelerators even when focus is
-         * in CommandBox or ResultDisplay.
-         */
         getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getTarget() instanceof TextInputControl && keyCombination.match(event)) {
                 menuItem.getOnAction().handle(new ActionEvent());
@@ -173,8 +156,10 @@ public class MainWindow extends UiPart<Stage> {
 
     private void handleViewPerson() {
         if (logic.getFilteredPersonList().isEmpty()) {
+            clearDetailPanel();
             return;
         }
+
         Person person = logic.getFilteredPersonList().get(0);
         detailPanelPlaceholder.getChildren().clear();
         PersonDetailPanel detailPanel = new PersonDetailPanel(person);
@@ -184,6 +169,8 @@ public class MainWindow extends UiPart<Stage> {
         personListPanelPlaceholder.setManaged(false);
         detailPanelPlaceholder.setVisible(true);
         detailPanelPlaceholder.setManaged(true);
+
+        isInViewMode = true;
     }
 
     private void clearDetailPanel() {
@@ -193,6 +180,8 @@ public class MainWindow extends UiPart<Stage> {
         personListPanelPlaceholder.setManaged(true);
         detailPanelPlaceholder.setVisible(false);
         detailPanelPlaceholder.setManaged(false);
+
+        isInViewMode = false;
     }
 
     public PersonListPanel getPersonListPanel() {
@@ -220,7 +209,12 @@ public class MainWindow extends UiPart<Stage> {
 
             if (commandResult.isViewMode()) {
                 handleViewPerson();
+            } else if (isInViewMode && logic.getFilteredPersonList().size() == 1) {
+                // Still effectively viewing one person after an edit command:
+                // refresh detail panel with updated person data.
+                handleViewPerson();
             } else {
+                // Commands like list/find/remind that show multiple persons should exit view mode.
                 clearDetailPanel();
             }
 
@@ -232,4 +226,3 @@ public class MainWindow extends UiPart<Stage> {
         }
     }
 }
-

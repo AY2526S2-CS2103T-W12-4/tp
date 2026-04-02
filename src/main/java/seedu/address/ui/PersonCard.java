@@ -12,7 +12,7 @@ import javafx.scene.layout.Region;
 import seedu.address.model.person.Person;
 
 /**
- * An UI component that displays information of a {@code Person}.
+ * A UI component that displays information of a {@code Person}.
  */
 public class PersonCard extends UiPart<Region> {
 
@@ -61,7 +61,7 @@ public class PersonCard extends UiPart<Region> {
 
         email.getStyleClass().removeAll("person-email-link", "person-field-empty");
 
-        boolean hasEmail = !emailValue.equals("missing@email.empty") && !emailValue.isBlank();
+        boolean hasEmail = !emailValue.equals("missing@email.empty");
 
         if (hasEmail) {
             email.setText(emailValue);
@@ -90,7 +90,7 @@ public class PersonCard extends UiPart<Region> {
         circleBadge.getStyleClass().removeAll("circle-client", "circle-prospect", "circle-friend");
 
         person.getCircle().ifPresentOrElse(c -> {
-            String circle = c.trim().toLowerCase();
+            String circle = c.getCircleName();
             circleBadge.setText(circle);
             setShown(circleBadge, true);
 
@@ -111,6 +111,7 @@ public class PersonCard extends UiPart<Region> {
 
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
+                .limit(5)
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
     }
 

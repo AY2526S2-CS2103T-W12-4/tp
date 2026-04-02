@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
@@ -11,40 +10,46 @@
       spacing="10">
     <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
 
-    <HBox spacing="8">
-        <Label fx:id="name" styleClass="person-name-label"/>
-        <Label fx:id = "circleBadge"
-               text = "client"
-               styleClass= "circle-badge"
-               visible="false" managed="false"/>
-    </HBox>
-
-    <FlowPane fx:id="tags" alignment="TOP_LEFT" hgap="10" vgap="10" prefWrapLength="220" prefWidth="220" />
+    <Label text="Contact Details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
 
     <HBox spacing="8">
-        <Label text="Phone:" StyleClass="view-title"/>
-        <Label fx:id="phone" StyleClass="view-text"/>
+        <Label text="Name:" style="-fx-font-weight: bold;"/>
+        <Label fx:id="name"/>
     </HBox>
 
     <HBox spacing="8">
-        <Label text="Email:" StyleClass="view-title"/>
-        <Label fx:id="email" StyleClass="view-email-text"/>
+        <Label text="Phone:" style="-fx-font-weight: bold;"/>
+        <Label fx:id="phone"/>
     </HBox>
 
     <HBox spacing="8">
-        <Label text="Address:" StyleClass="view-title"/>
-        <Label fx:id="address" StyleClass="view-text"/>
+        <Label text="Email:" style="-fx-font-weight: bold;"/>
+        <Label fx:id="email"/>
+    </HBox>
+
+    <HBox spacing="8">
+        <Label text="Address:" style="-fx-font-weight: bold;"/>
+        <Label fx:id="address" wrapText="true"/>
+    </HBox>
+
+    <HBox fx:id="tagsRow" spacing="8">
+        <Label text="Tags:" style="-fx-font-weight: bold;"/>
+        <Label fx:id="tags" wrapText="true"/>
     </HBox>
 
     <HBox fx:id="notesRow" spacing="8">
-        <Label text="Notes:" StyleClass="view-title"/>
-        <Label fx:id="notes" StyleClass="view-text" wrapText="true"/>
+        <Label text="Notes:" style="-fx-font-weight: bold;"/>
+        <Label fx:id="notes" wrapText="true"/>
     </HBox>
 
     <HBox fx:id="followUpRow" spacing="8">
-        <Label text="Follow Up:" StyleClass="view-title"/>
-        <Label fx:id="followUpDate" styleClass="view-text"/>
+        <Label text="Follow Up:" style="-fx-font-weight: bold;"/>
+        <Label fx:id="followUpDate"/>
+    </HBox>
+
+    <HBox fx:id="circleRow" spacing="8">
+        <Label text="Circle:" style="-fx-font-weight: bold;"/>
+        <Label fx:id="circle"/>
     </HBox>
 
 </VBox>
-

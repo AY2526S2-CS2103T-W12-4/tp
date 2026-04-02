@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
+import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,53 +21,45 @@ public class TagAddCommandParserTest {
         Index expectedIndex = Index.fromOneBased(1);
         TagAddCommand expectedCommand = new TagAddCommand(expectedTag, expectedIndex);
 
-        // normal
         assertParseSuccess(parser, "1 t/friend", expectedCommand);
-
-        // leading/trailing whitespace
         assertParseSuccess(parser, "   1   t/friend   ", expectedCommand);
+
+        Tag hyphenTag = new Tag("hello-world");
+        TagAddCommand hyphenCommand = new TagAddCommand(hyphenTag, expectedIndex);
+        assertParseSuccess(parser, "1 t/hello-world", hyphenCommand);
     }
 
     @Test
-    public void parse_missingTagPrefix_failure() {
-        // no t/ provided at all
-        assertParseFailure(parser, "1", "Missing tag value. Use prefix t/TAG.");
+    public void parse_missingTag_failure() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagAddCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, "1", expectedMessage);
+    }
+
+    @Test
+    public void parse_missingIndex_failure() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagAddCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, "t/friend", expectedMessage);
+        assertParseFailure(parser, "", expectedMessage);
     }
 
     @Test
     public void parse_multipleTags_failure() {
-        // more than one t/ should fail with invalid command format using MESSAGE_USAGE
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagAddCommand.MESSAGE_USAGE);
         assertParseFailure(parser, "1 t/friend t/enemy", expectedMessage);
     }
 
     @Test
     public void parse_invalidIndex_failure() {
-        // zero index
-        assertParseFailure(parser, "0 t/friend", "Index is not a non-zero unsigned integer.");
-
-        // non-integer index
-        assertParseFailure(parser, "abc t/friend", "Index is not a non-zero unsigned integer.");
-
-        // missing index (empty input) — current parser behavior
-        assertParseFailure(parser, "", "Index is not a non-zero unsigned integer.");
-    }
-
-    @Test
-    public void parse_unknownPrefixInPreamble_failure() {
-        // unknown prefix-like token in preamble should be rejected
-        assertParseFailure(parser, "1 l/123 t/friend", "Invalid prefix detected: l/123");
+        assertParseFailure(parser, "0 t/friend", MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "abc t/friend", MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "1 extra t/friend", MESSAGE_INVALID_INDEX);
     }
 
     @Test
     public void parse_invalidTag_failure() {
-        // tag violates Tag constraints -> parser wraps with its own message
-        assertParseFailure(parser, "1 t/@@@", "Invalid tag format. Tags must be 1–20 chars (a-z, 0-9, -).");
-    }
-
-    @Test
-    public void parse_emptyTagValue_failure() {
-        // prefix is present but empty value -> treated as invalid tag format in your parser
-        assertParseFailure(parser, "1 t/", "Invalid tag format. Tags must be 1–20 chars (a-z, 0-9, -).");
+        assertParseFailure(parser, "1 t/@@@", Tag.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1 t/Hello", Tag.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1 t/bro ther", Tag.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "1 t/", Tag.MESSAGE_CONSTRAINTS);
     }
 }

@@ -30,7 +30,7 @@ public class TagRemoveCommandTest {
         Tag existingTag = personToEdit.getTags().iterator().next();
 
         Set<Tag> updatedTags = new HashSet<>(personToEdit.getTags());
-        updatedTags.removeIf(t -> t.tagName.equals(existingTag.tagName));
+        updatedTags.remove(existingTag);
         Person editedPerson = new Person(
                 personToEdit.getName(), personToEdit.getPhone(),
                 personToEdit.getEmail(), personToEdit.getAddress(), updatedTags,

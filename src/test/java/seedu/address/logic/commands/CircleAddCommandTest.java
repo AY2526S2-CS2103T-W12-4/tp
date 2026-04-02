@@ -57,14 +57,14 @@ public class CircleAddCommandTest {
             personAtIndex.getTags(),
             personAtIndex.getFollowUpDate(),
             personAtIndex.getNotes(),
-            java.util.Optional.of(FRIENDS.circleName)
+            java.util.Optional.of(FRIENDS)
         );
 
         expectedModel.setPerson(personAtIndex, circledPerson);
 
         CircleAddCommand command = new CircleAddCommand(INDEX_FIRST_PERSON, FRIENDS);
         String expectedMessage = String.format(
-            CircleAddCommand.MESSAGE_CIRCLE_PERSON_SUCCESS, FRIENDS.circleName, circledPerson.getName());
+            CircleAddCommand.MESSAGE_CIRCLE_PERSON_SUCCESS, FRIENDS.getCircleName(), circledPerson.getName());
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
@@ -83,14 +83,37 @@ public class CircleAddCommandTest {
             personAtIndex.getTags(),
             personAtIndex.getFollowUpDate(),
             personAtIndex.getNotes(),
-            java.util.Optional.of(PROSPECTS.circleName)
+            java.util.Optional.of(PROSPECTS)
         );
 
         expectedModel.setPerson(personAtIndex, circledPerson);
 
         CircleAddCommand command = new CircleAddCommand(INDEX_FIRST_PERSON, PROSPECTS);
         String expectedMessage = String.format(
-            CircleAddCommand.MESSAGE_CIRCLE_PERSON_SUCCESS, PROSPECTS.circleName, circledPerson.getName());
+            CircleAddCommand.MESSAGE_CIRCLE_PERSON_SUCCESS, PROSPECTS.getCircleName(), circledPerson.getName());
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+
+        // Test friend circle
+        model = new ModelManager(createCleanAddressBook(), new UserPrefs());
+        expectedModel = new ModelManager(createCleanAddressBook(), new UserPrefs());
+
+        personAtIndex = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+        circledPerson = new Person(
+            personAtIndex.getName(),
+            personAtIndex.getPhone(),
+            personAtIndex.getEmail(),
+            personAtIndex.getAddress(),
+            personAtIndex.getTags(),
+            personAtIndex.getFollowUpDate(),
+            personAtIndex.getNotes(),
+            java.util.Optional.of(FRIENDS)
+        );
+
+        expectedModel.setPerson(personAtIndex, circledPerson);
+
+        command = new CircleAddCommand(INDEX_SECOND_PERSON, FRIENDS);
+        expectedMessage = String.format(
+            CircleAddCommand.MESSAGE_CIRCLE_PERSON_SUCCESS, FRIENDS.getCircleName(), circledPerson.getName());
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
@@ -110,14 +133,14 @@ public class CircleAddCommandTest {
             personAtIndex.getTags(),
             personAtIndex.getFollowUpDate(),
             personAtIndex.getNotes(),
-            java.util.Optional.of(PROSPECTS.circleName)
+            java.util.Optional.of(PROSPECTS)
         );
 
         expectedModel.setPerson(personAtIndex, circledPerson);
 
         CircleAddCommand command = new CircleAddCommand(lastIndex, PROSPECTS);
         String expectedMessage = String.format(
-            CircleAddCommand.MESSAGE_CIRCLE_PERSON_SUCCESS, PROSPECTS.circleName, circledPerson.getName());
+            CircleAddCommand.MESSAGE_CIRCLE_PERSON_SUCCESS, PROSPECTS.getCircleName(), circledPerson.getName());
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
@@ -162,7 +185,7 @@ public class CircleAddCommandTest {
             personAtIndex.getTags(),
             personAtIndex.getFollowUpDate(),
             personAtIndex.getNotes(),
-            java.util.Optional.of(CLIENTS.circleName)
+            java.util.Optional.of(CLIENTS)
         );
         model.setPerson(personAtIndex, personWithCircle);
 
@@ -231,6 +254,6 @@ public class CircleAddCommandTest {
     public void toString_correct() {
         CircleAddCommand command = new CircleAddCommand(INDEX_FIRST_PERSON, FRIENDS);
         assertTrue(command.toString().contains(INDEX_FIRST_PERSON.toString())
-            && command.toString().contains(FRIENDS.circleName));
+            && command.toString().contains(FRIENDS.getCircleName()));
     }
 }

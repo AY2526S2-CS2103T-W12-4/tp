@@ -9,47 +9,29 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.tag.Tag;
 
 /**
- * Parses input arguments and creates a new TagRemoveCommand object
+ * Parses input arguments and creates a new TagRemoveCommand object.
  */
 public class TagRemoveCommandParser implements Parser<TagRemoveCommand> {
 
     /**
      * Parses the given {@code String} of arguments in the context of the TagRemoveCommand
      * and returns a TagRemoveCommand object for execution.
-     * @throws ParseException if the user input does not conform the expected format
+     *
+     * @throws ParseException if the user input does not conform to the expected format
      */
     public TagRemoveCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
 
-        String preamble = argMultimap.getPreamble().trim();
-        String[] preambleParts = preamble.split("\\s+");
-
-        for (String part : preambleParts) {
-            if (part.matches("[a-zA-Z]+/.*") && !part.startsWith("t/")) {
-                throw new ParseException("Invalid prefix detected: " + part);
-            }
-        }
-
-        if (preambleParts.length == 0) {
-            throw new ParseException("Missing index.");
-        }
-
-        Index index;
-        try {
-            index = ParserUtil.parseIndex(preambleParts[0]);
-        } catch (ParseException pe) {
-            throw new ParseException("Index is not a non-zero unsigned integer.");
+        if (argMultimap.getPreamble().trim().isEmpty() || !argMultimap.getValue(PREFIX_TAG).isPresent()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagRemoveCommand.MESSAGE_USAGE));
         }
 
         if (argMultimap.getAllValues(PREFIX_TAG).size() > 1) {
-            throw new ParseException(
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagRemoveCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagRemoveCommand.MESSAGE_USAGE));
         }
 
-        Tag tag = ParserUtil.parseTag(
-            argMultimap.getValue(PREFIX_TAG)
-                .orElseThrow(() -> new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagRemoveCommand.MESSAGE_USAGE))));
+        Index index = ParserUtil.parseIndex(argMultimap.getPreamble().trim());
+        Tag tag = ParserUtil.parseTag(argMultimap.getValue(PREFIX_TAG).get());
 
         return new TagRemoveCommand(tag, index);
     }

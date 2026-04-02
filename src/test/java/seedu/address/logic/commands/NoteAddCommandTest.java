@@ -55,7 +55,7 @@ public class NoteAddCommandTest {
     public void execute_invalidIndexUnfilteredList_throwsCommandException() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         NoteAddCommand command = new NoteAddCommand(outOfBoundIndex, new Note(NOTE_STUB));
-        assertCommandFailure(command, model, NoteAddCommand.MESSAGE_INVALID_PERSON);
+        assertCommandFailure(command, model, NoteAddCommand.MESSAGE_INVALID_INDEX);
     }
 
     @Test
@@ -108,9 +108,9 @@ public class NoteAddCommandTest {
 
     @Test
     public void execute_wordLimitExceeded_throwsCommandException() {
-        // Start a person with 100 words in their note
+        // Start a person with 500 characters in their note
         Person original = model.getFilteredPersonList().get(0);
-        String existingNote = "word ".repeat(100).trim();
+        String existingNote = "w".repeat(500).trim();
         Person withExistingNote = new Person(
                 original.getName(), original.getPhone(), original.getEmail(),
                 original.getAddress(), original.getTags(),
@@ -119,8 +119,8 @@ public class NoteAddCommandTest {
                 original.getCircle());
         model.setPerson(original, withExistingNote);
 
-        // Adding 101 words would push total to 201 — should fail
-        String newNote = "word ".repeat(101).trim();
+        // Adding 501 characters would push total to 1001 - should fail
+        String newNote = "w".repeat(501).trim();
         NoteAddCommand command = new NoteAddCommand(Index.fromOneBased(1), new Note(newNote));
 
         assertThrows(CommandException.class, () -> command.execute(model));

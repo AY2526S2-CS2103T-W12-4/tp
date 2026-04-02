@@ -5,15 +5,14 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Person's note in the address book.
- * Guarantees: immutable; is valid as declared in {@link #isValidNote(String)}
  */
 public class Note {
 
     public static final String MESSAGE_CONSTRAINTS =
             "Notes must not be blank.";
-    public static final int MAX_WORD_COUNT = 200;
-    public static final String MESSAGE_WORD_LIMIT_EXCEEDED =
-            "Note exceeds the maximum word count of " + MAX_WORD_COUNT + " words.";
+    public static final int MAX_CHAR_COUNT = 1000;
+    public static final String MESSAGE_CHAR_LIMIT_EXCEEDED =
+            "Note exceeds the maximum character count of " + MAX_CHAR_COUNT + " characters.";
 
     public final String value;
 
@@ -24,23 +23,16 @@ public class Note {
      */
     public Note(String note) {
         requireNonNull(note);
-        checkArgument(isValidNote(note), MESSAGE_CONSTRAINTS);
+        checkArgument(!note.isBlank(), MESSAGE_CONSTRAINTS);
+        checkArgument(note.length() <= MAX_CHAR_COUNT, MESSAGE_CHAR_LIMIT_EXCEEDED);
         this.value = note;
     }
 
     /**
-     * Returns true if a given string is non-blank.
-     * @param test user input.
+     * Returns the number of characters in this note.
      */
-    public static boolean isValidNote(String test) {
-        return !test.trim().isEmpty();
-    }
-
-    /**
-     * Returns the number of words in this note.
-     */
-    public int wordCount() {
-        return value.trim().split("\\s+").length;
+    public int charCount() {
+        return value.trim().length();
     }
 
     @Override

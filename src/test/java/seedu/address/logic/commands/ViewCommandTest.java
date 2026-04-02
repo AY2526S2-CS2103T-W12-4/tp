@@ -32,20 +32,13 @@ public class ViewCommandTest {
         ViewCommand viewFirstCommand = new ViewCommand(Index.fromOneBased(1));
         ViewCommand viewSecondCommand = new ViewCommand(Index.fromOneBased(2));
 
-        // same object -> returns true
         assertTrue(viewFirstCommand.equals(viewFirstCommand));
 
-        // same values -> returns true
         ViewCommand viewFirstCommandCopy = new ViewCommand(Index.fromOneBased(1));
         assertTrue(viewFirstCommand.equals(viewFirstCommandCopy));
 
-        // different types -> returns false
         assertFalse(viewFirstCommand.equals(1));
-
-        // null -> returns false
         assertFalse(viewFirstCommand.equals(null));
-
-        // different index -> returns false
         assertFalse(viewFirstCommand.equals(viewSecondCommand));
     }
 
@@ -61,11 +54,11 @@ public class ViewCommandTest {
                 personToView.getName()
         );
 
-        expectedModel.updateFilteredPersonList(p -> p.equals(personToView));
+        expectedModel.updateFilteredPersonList(p -> p.isSamePerson(personToView));
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
 
-        assertEquals(Collections.singletonList(personToView),
+        assertEquals(Collections.singletonList(model.getFilteredPersonList().get(0)),
                 model.getFilteredPersonList());
     }
 

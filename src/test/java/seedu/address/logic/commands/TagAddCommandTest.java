@@ -65,20 +65,6 @@ public class TagAddCommandTest {
     }
 
     @Test
-    public void execute_invalidTagFormat_throwsCommandException() {
-        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        Index index = Index.fromOneBased(1);
-
-        // Tag with invalid characters (uppercase letters not matching a-z0-9-)
-        Tag invalidTag = new Tag("INVALID");
-
-        TagAddCommand command = new TagAddCommand(invalidTag, index);
-
-        assertThrows(CommandException.class,
-                TagAddCommand.MESSAGE_INVALID_TAG, () -> command.execute(model));
-    }
-
-    @Test
     public void execute_lastPersonValidTag_success() throws Exception {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
@@ -122,5 +108,23 @@ public class TagAddCommandTest {
         // different tag -> returns false
         TagAddCommand tagAddDifferentTag = new TagAddCommand(new Tag("friend"), Index.fromOneBased(1));
         assertFalse(tagAddFirstCommand.equals(tagAddDifferentTag));
+    }
+
+    @Test
+    public void execute_tagLimitReached_throwsCommandException() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+        Index index = Index.fromOneBased(1);
+        Person originalPerson = model.getFilteredPersonList().get(index.getZeroBased());
+
+        Person personWithFiveTags = new seedu.address.testutil.PersonBuilder(originalPerson)
+                .withTags("tag1", "tag2", "tag3", "tag4", "tag5")
+                .build();
+        model.setPerson(originalPerson, personWithFiveTags);
+
+        TagAddCommand command = new TagAddCommand(new Tag("tag6"), index);
+
+        assertThrows(CommandException.class,
+                TagAddCommand.MESSAGE_TAG_LIMIT_REACHED, () -> command.execute(model));
     }
 }
