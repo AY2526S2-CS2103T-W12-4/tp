@@ -5,7 +5,6 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Person's note in the address book.
- * Guarantees: immutable; is valid as declared in {@link #isValidNote(String)}
  */
 public class Note {
 
@@ -24,16 +23,9 @@ public class Note {
      */
     public Note(String note) {
         requireNonNull(note);
-        checkArgument(isValidNote(note), MESSAGE_CONSTRAINTS);
+        checkArgument(!note.isBlank(), MESSAGE_CONSTRAINTS);
+        checkArgument(note.length() <= MAX_CHAR_COUNT, MESSAGE_CHAR_LIMIT_EXCEEDED);
         this.value = note;
-    }
-
-    /**
-     * Returns true if a given string is non-blank && <= MAX_CHAR_COUNT.
-     * @param test user input.
-     */
-    public static boolean isValidNote(String test) {
-        return !test.trim().isEmpty() && test.length() <= MAX_CHAR_COUNT;
     }
 
     /**

@@ -4,8 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.NoteAddCommand.MESSAGE_INVALID_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTE;
-import static seedu.address.model.person.Note.MAX_CHAR_COUNT;
-import static seedu.address.model.person.Note.MESSAGE_CHAR_LIMIT_EXCEEDED;
 import static seedu.address.model.person.Note.MESSAGE_CONSTRAINTS;
 
 import seedu.address.commons.core.index.Index;
@@ -51,14 +49,14 @@ public class NoteAddCommandParser implements Parser<NoteAddCommand> {
         if (noteText.isEmpty()) {
             throw new ParseException(MESSAGE_CONSTRAINTS);
         }
+        Index index = Index.fromOneBased(rawInt);
 
         // Validate the word count of the new input is <= MAX_CHAR_COUNT
         // Validating the combined total word count is inside NoteAddCommand.execute()
-        if (noteText.length() > MAX_CHAR_COUNT) {
-            throw new ParseException(MESSAGE_CHAR_LIMIT_EXCEEDED);
+        try {
+            return new NoteAddCommand(index, new Note(noteText));
+        } catch (IllegalArgumentException e) {
+            throw new ParseException(e.getMessage());
         }
-
-        Index index = Index.fromOneBased(rawInt);
-        return new NoteAddCommand(index, new Note(noteText));
     }
 }
