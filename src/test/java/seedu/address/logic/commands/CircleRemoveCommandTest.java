@@ -1,9 +1,15 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalCircles.CLIENTS;
+import static seedu.address.testutil.TypicalCircles.FRIENDS;
+import static seedu.address.testutil.TypicalCircles.PROSPECTS;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Optional;
@@ -17,6 +23,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.circle.Circle;
 import seedu.address.model.person.Person;
+import seedu.address.testutil.PersonBuilder;
 
 public class CircleRemoveCommandTest {
 
@@ -25,50 +32,13 @@ public class CircleRemoveCommandTest {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
-        Index index = Index.fromOneBased(1);
+        Person personWithCircle = setCircleAtIndex(model, INDEX_FIRST_PERSON, Optional.of(CLIENTS));
+        setCircleAtIndex(expectedModel, INDEX_FIRST_PERSON, Optional.of(CLIENTS));
 
-        // Get the person and add a circle if they don't have one
-        Person personAtIndex = model.getFilteredPersonList().get(index.getZeroBased());
-        Person personWithCircle = new Person(
-            personAtIndex.getName(),
-            personAtIndex.getPhone(),
-            personAtIndex.getEmail(),
-            personAtIndex.getAddress(),
-            personAtIndex.getTags(),
-            personAtIndex.getFollowUpDate(),
-            personAtIndex.getNotes(),
-            Optional.of(new Circle("client"))
-        );
-        model.setPerson(personAtIndex, personWithCircle);
-
-        // Same for expected model
-        Person expectedPersonAtIndex = expectedModel.getFilteredPersonList().get(index.getZeroBased());
-        Person expectedPersonWithCircle = new Person(
-            expectedPersonAtIndex.getName(),
-            expectedPersonAtIndex.getPhone(),
-            expectedPersonAtIndex.getEmail(),
-            expectedPersonAtIndex.getAddress(),
-            expectedPersonAtIndex.getTags(),
-            expectedPersonAtIndex.getFollowUpDate(),
-            expectedPersonAtIndex.getNotes(),
-            Optional.of(new Circle("client"))
-        );
-        expectedModel.setPerson(expectedPersonAtIndex, expectedPersonWithCircle);
-
-        // Now remove the circle
-        Person personWithoutCircle = new Person(
-            personWithCircle.getName(),
-            personWithCircle.getPhone(),
-            personWithCircle.getEmail(),
-            personWithCircle.getAddress(),
-            personWithCircle.getTags(),
-            personWithCircle.getFollowUpDate(),
-            personWithCircle.getNotes(),
-            Optional.empty()
-        );
+        Person personWithoutCircle = buildPersonWithCircle(personWithCircle, Optional.empty());
         expectedModel.setPerson(personWithCircle, personWithoutCircle);
 
-        CircleRemoveCommand command = new CircleRemoveCommand(index);
+        CircleRemoveCommand command = new CircleRemoveCommand(INDEX_FIRST_PERSON);
         String expectedMessage = String.format(CircleRemoveCommand.MESSAGE_CIRCLE_PERSON_SUCCESS,
             personWithCircle.getName());
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -90,25 +60,9 @@ public class CircleRemoveCommandTest {
     public void execute_personWithoutCircle_throwsCommandException() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
-        Index index = Index.fromOneBased(1);
+        setCircleAtIndex(model, INDEX_FIRST_PERSON, Optional.empty());
 
-        // Ensure person doesn't have a circle
-        Person personAtIndex = model.getFilteredPersonList().get(index.getZeroBased());
-        if (personAtIndex.getCircle().isPresent()) {
-            Person personWithoutCircle = new Person(
-                personAtIndex.getName(),
-                personAtIndex.getPhone(),
-                personAtIndex.getEmail(),
-                personAtIndex.getAddress(),
-                personAtIndex.getTags(),
-                personAtIndex.getFollowUpDate(),
-                personAtIndex.getNotes(),
-                Optional.empty()
-            );
-            model.setPerson(personAtIndex, personWithoutCircle);
-        }
-
-        CircleRemoveCommand command = new CircleRemoveCommand(index);
+        CircleRemoveCommand command = new CircleRemoveCommand(INDEX_FIRST_PERSON);
 
         assertThrows(CommandException.class,
             CircleRemoveCommand.MESSAGE_CIRCLE_PERSON_FAILURE, () -> command.execute(model));
@@ -121,45 +75,10 @@ public class CircleRemoveCommandTest {
 
         Index lastIndex = Index.fromOneBased(model.getFilteredPersonList().size());
 
-        // Add circle to last person
-        Person lastPersonAtIndex = model.getFilteredPersonList().get(lastIndex.getZeroBased());
-        Person lastPersonWithCircle = new Person(
-            lastPersonAtIndex.getName(),
-            lastPersonAtIndex.getPhone(),
-            lastPersonAtIndex.getEmail(),
-            lastPersonAtIndex.getAddress(),
-            lastPersonAtIndex.getTags(),
-            lastPersonAtIndex.getFollowUpDate(),
-            lastPersonAtIndex.getNotes(),
-            Optional.of(new Circle("prospect"))
-        );
-        model.setPerson(lastPersonAtIndex, lastPersonWithCircle);
+        Person lastPersonWithCircle = setCircleAtIndex(model, lastIndex, Optional.of(PROSPECTS));
+        setCircleAtIndex(expectedModel, lastIndex, Optional.of(PROSPECTS));
 
-        // Same for expected model
-        Person expectedLastPersonAtIndex = expectedModel.getFilteredPersonList().get(lastIndex.getZeroBased());
-        Person expectedLastPersonWithCircle = new Person(
-            expectedLastPersonAtIndex.getName(),
-            expectedLastPersonAtIndex.getPhone(),
-            expectedLastPersonAtIndex.getEmail(),
-            expectedLastPersonAtIndex.getAddress(),
-            expectedLastPersonAtIndex.getTags(),
-            expectedLastPersonAtIndex.getFollowUpDate(),
-            expectedLastPersonAtIndex.getNotes(),
-            Optional.of(new Circle("prospect"))
-        );
-        expectedModel.setPerson(expectedLastPersonAtIndex, expectedLastPersonWithCircle);
-
-        // Remove circle from last person
-        Person lastPersonWithoutCircle = new Person(
-            lastPersonWithCircle.getName(),
-            lastPersonWithCircle.getPhone(),
-            lastPersonWithCircle.getEmail(),
-            lastPersonWithCircle.getAddress(),
-            lastPersonWithCircle.getTags(),
-            lastPersonWithCircle.getFollowUpDate(),
-            lastPersonWithCircle.getNotes(),
-            Optional.empty()
-        );
+        Person lastPersonWithoutCircle = buildPersonWithCircle(lastPersonWithCircle, Optional.empty());
         expectedModel.setPerson(lastPersonWithCircle, lastPersonWithoutCircle);
 
         CircleRemoveCommand command = new CircleRemoveCommand(lastIndex);
@@ -170,38 +89,18 @@ public class CircleRemoveCommandTest {
 
     @Test
     public void execute_multiplePersonsWithCircles() {
-        String[] circles = {"client", "prospect", "friend"};
+        Circle[] circles = {CLIENTS, PROSPECTS, FRIENDS};
 
-        for (String circleName : circles) {
+        for (Circle circle : circles) {
             Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
-            Index index = Index.fromOneBased(1);
+            setCircleAtIndex(model, INDEX_FIRST_PERSON, Optional.of(circle));
 
-            // Add circle
-            Person personAtIndex = model.getFilteredPersonList().get(index.getZeroBased());
-            Person personWithCircle = new Person(
-                personAtIndex.getName(),
-                personAtIndex.getPhone(),
-                personAtIndex.getEmail(),
-                personAtIndex.getAddress(),
-                personAtIndex.getTags(),
-                personAtIndex.getFollowUpDate(),
-                personAtIndex.getNotes(),
-                Optional.of(new Circle(circleName))
-            );
-            model.setPerson(personAtIndex, personWithCircle);
+            CircleRemoveCommand command = new CircleRemoveCommand(INDEX_FIRST_PERSON);
 
-            // Remove circle
-            CircleRemoveCommand command = new CircleRemoveCommand(index);
-
-            try {
-                command.execute(model);
-                // Verify circle was removed
-                Person updatedPerson = model.getFilteredPersonList().get(index.getZeroBased());
-                assertTrue(updatedPerson.getCircle().isEmpty());
-            } catch (CommandException e) {
-                assertTrue(false, "Should not throw exception for person with circle");
-            }
+            assertDoesNotThrow(() -> command.execute(model));
+            Person updatedPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+            assertTrue(updatedPerson.getCircle().isEmpty());
         }
     }
 
@@ -209,49 +108,25 @@ public class CircleRemoveCommandTest {
     public void execute_removeCircleThenAddAgain() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
-        Index index = Index.fromOneBased(1);
+        setCircleAtIndex(model, INDEX_FIRST_PERSON, Optional.of(CLIENTS));
 
-        // Add circle
-        Person personAtIndex = model.getFilteredPersonList().get(index.getZeroBased());
-        Person personWithCircle = new Person(
-            personAtIndex.getName(),
-            personAtIndex.getPhone(),
-            personAtIndex.getEmail(),
-            personAtIndex.getAddress(),
-            personAtIndex.getTags(),
-            personAtIndex.getFollowUpDate(),
-            personAtIndex.getNotes(),
-            Optional.of(new Circle("client"))
-        );
-        model.setPerson(personAtIndex, personWithCircle);
+        CircleRemoveCommand removeCommand = new CircleRemoveCommand(INDEX_FIRST_PERSON);
+        assertDoesNotThrow(() -> removeCommand.execute(model));
 
-        // Remove circle
-        CircleRemoveCommand removeCommand = new CircleRemoveCommand(index);
-        try {
-            removeCommand.execute(model);
-        } catch (CommandException e) {
-            assertTrue(false, "Remove should succeed for person with circle");
-        }
-
-        // Verify circle was removed
-        Person personAfterRemove = model.getFilteredPersonList().get(index.getZeroBased());
+        Person personAfterRemove = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         assertTrue(personAfterRemove.getCircle().isEmpty());
-
-        // Now verify that we can add a circle again
-        Person personToAddCircle = model.getFilteredPersonList().get(index.getZeroBased());
-        assertTrue(personToAddCircle.getCircle().isEmpty());
     }
 
     @Test
     public void equals() {
-        CircleRemoveCommand removeFirstCommand = new CircleRemoveCommand(Index.fromOneBased(1));
-        CircleRemoveCommand removeSecondCommand = new CircleRemoveCommand(Index.fromOneBased(2));
+        CircleRemoveCommand removeFirstCommand = new CircleRemoveCommand(INDEX_FIRST_PERSON);
+        CircleRemoveCommand removeSecondCommand = new CircleRemoveCommand(INDEX_SECOND_PERSON);
 
         // same object -> returns true
         assertTrue(removeFirstCommand.equals(removeFirstCommand));
 
         // same values -> returns true
-        CircleRemoveCommand removeFirstCommandCopy = new CircleRemoveCommand(Index.fromOneBased(1));
+        CircleRemoveCommand removeFirstCommandCopy = new CircleRemoveCommand(INDEX_FIRST_PERSON);
         assertTrue(removeFirstCommand.equals(removeFirstCommandCopy));
 
         // different types -> returns false
@@ -266,14 +141,31 @@ public class CircleRemoveCommandTest {
 
     @Test
     public void toString_correct() {
-        Index index = Index.fromOneBased(1);
-        CircleRemoveCommand command = new CircleRemoveCommand(index);
-
-        String expectedToString = "seedu.address.logic.commands.CircleRemoveCommand{"
-            + "index=Index 1"
-            + "}";
+        CircleRemoveCommand command = new CircleRemoveCommand(INDEX_FIRST_PERSON);
 
         assertTrue(command.toString().contains("index"));
     }
 
+    private Person setCircleAtIndex(Model model, Index index, Optional<Circle> circle) {
+        Person person = model.getFilteredPersonList().get(index.getZeroBased());
+        Person updatedPerson = circle.isPresent()
+                ? new PersonBuilder(person).withCircle(circle.get().getCircleName()).build()
+                : buildPersonWithCircle(person, Optional.empty());
+
+        model.setPerson(person, updatedPerson);
+        return updatedPerson;
+    }
+
+    private Person buildPersonWithCircle(Person base, Optional<Circle> circle) {
+        return new Person(
+                base.getName(),
+                base.getPhone(),
+                base.getEmail(),
+                base.getAddress(),
+                base.getTags(),
+                base.getFollowUpDate(),
+                base.getNotes(),
+                circle
+        );
+    }
 }
