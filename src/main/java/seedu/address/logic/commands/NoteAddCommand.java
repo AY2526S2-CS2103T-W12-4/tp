@@ -65,7 +65,7 @@ public class NoteAddCommand extends Command {
         String existingValue = personToEdit.getNotes().map(Note::toString).orElse("");
         String updatedValue = existingValue.isEmpty()
                 ? note.toString().trim()
-                : existingValue + "\n" + note.toString().trim();
+                : existingValue + " | " + note.toString().trim();
 
         if (updatedValue.length() > MAX_CHAR_COUNT) {
             throw new CommandException(MESSAGE_CHAR_LIMIT_EXCEEDED);
