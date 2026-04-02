@@ -3,10 +3,11 @@ package seedu.address.ui;
 import static seedu.address.ui.PersonCard.setShown;
 
 import java.time.LocalDate;
-import java.util.stream.Collectors;
+import java.util.Comparator;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.Note;
 import seedu.address.model.person.Person;
@@ -27,7 +28,7 @@ public class PersonDetailPanel extends UiPart<Region> {
     @FXML
     private Label address;
     @FXML
-    private Label tags;
+    private FlowPane tags;
     @FXML
     private Label notes;
     @FXML
@@ -46,13 +47,10 @@ public class PersonDetailPanel extends UiPart<Region> {
         email.setText(person.getEmail().value);
         address.setText(person.getAddress().value);
 
-        String tagText = person.getTags().isEmpty()
-                ? "-"
-                : person.getTags().stream()
-                .map(tag -> tag.tagName)
-                .sorted()
-                .collect(Collectors.joining(", "));
-        tags.setText(tagText);
+        person.getTags().stream()
+                .sorted(Comparator.comparing(tag -> tag.tagName))
+                .limit(5)
+                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
 
         notes.setText(person.getNotes()
                 .map(Note::toString)

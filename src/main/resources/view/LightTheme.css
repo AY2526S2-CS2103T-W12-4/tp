@@ -230,3 +230,11 @@
     -fx-text-fill: #0b63ce;
     -fx-underline: true;
 }
+
+.view-name-label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2f4156;
+}
+
