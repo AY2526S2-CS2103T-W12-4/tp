@@ -73,14 +73,14 @@ A **Graphical User Interface (GUI)** is provided too, so that you can have the b
 
 <div markdown="span" class="alert alert-primary">
 
-**Tip #1:** Read the [Command Summary](#command-summary) first for a quick overview of the available commands before 
+**Tip #1:** Read the [Command Summary](#command-summary) first for a quick overview of the available commands before
 proceeding to the detailed feature descriptions below.
 
 </div>
 
 <div markdown="span" class="alert alert-primary">
 
-**Tip #2:** Read the [Notes on Command Format](#features) before diving into individual features, it explains things 
+**Tip #2:** Read the [Notes on Command Format](#features) before diving into individual features, it explains things
 like optional fields and command parameters that will make using the app much easier!
 
 </div>
@@ -111,7 +111,7 @@ like optional fields and command parameters that will make using the app much ea
 
 * For commands that require an `INDEX`, the index refers to the number shown beside the contact in the displayed list. The index must be a positive integer (e.g. `1, 2, 3, ...`) and be within the valid range of the current displayed list of contacts.
 
-* In [View Mode](#view-mode), the index of the displayed contact is always `1`.
+* In [View Mode](#view-mode), only the selected contact remains in the filtered list, so commands that require an `INDEX` should use `1`.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands
   that span multiple lines, as space characters surrounding line breaks may be omitted when copied into the application.
@@ -119,7 +119,7 @@ like optional fields and command parameters that will make using the app much ea
 
 ### Viewing help : `help`
 
-Shows a message explaining how to access the help page.
+Opens the help window, which contains a link to the User Guide.
 
 ![help message](images/helpMessage.png)
 
@@ -165,7 +165,7 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG] [d/FOLLOWUP
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** `1, 2, 3, …`  and be within the valid range of the current displayed list of contacts.
 * In [view mode](#view-mode), the index of the displayed contact is always `1`.
-* At least one of the optional fields must be provided. 
+* At least one of the optional fields must be provided.
 * If no fields are modified, the command will be rejected.
 * Existing values will be updated to the input values.
 * Refer to [Field Constraints Summary](#field-constraints-summary) for a summary of the field constraints.
@@ -187,7 +187,7 @@ To prevent this, ensure all prefixes are valid and separated by spaces.
 
 <div markdown="span" class="alert alert-warning">
 
-**Warning:** Editing tags will replace **all** existing tags. Make sure to include all the tags you want the person to have 
+**Warning:** Editing tags will replace **all** existing tags. Make sure to include all the tags you want the person to have
 when using `edit`.<br>
 Example:
 A contact initially has the tags `friend` and `colleague`. After you run `edit 1 t/friend t/cafe`, only the tags `friend` and `cafe` will be displayed.
@@ -235,9 +235,9 @@ The screenshot below shows the app in View Mode.
 After running `view`, the app enters **View Mode**, displaying the full details of the selected contact.
 
 While in View Mode:
-* The displayed contact is always shown at **index 1** in the list.
+* Only the selected contact remains in the filtered list.
 * Any command that takes an index (e.g. `edit`, `delete`, `note`) must use **index 1** to operate on the displayed contact.
-* Commands that will exit View Mode: `add`, `delete`, `list`, `find`, `remind`, `clear`, `exit`.
+* Commands that will exit View Mode: `add`, `delete`, `list`, `find`, `remind`, `clear`, `circlefilter`, `exit`.
 * Run `list` to exit View Mode and return to the full contact list.
 
 <div markdown="span" class="alert alert-primary">
@@ -348,7 +348,7 @@ A circle refers to the type of relationship the user has with the contact.
 Format: `circleadd INDEX c/CIRCLE`
 
 * Adds a circle to the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** `1, 2, 3, …` and be within the valid range of the current displayed list of contacts.
-* There are only 3 types of circles: `client`, `prospect`, and `friend`. The circle must be one of these 3 types. Any other value given to `circleadd` will be rejected.
+* There are only 3 types of circles: `client`, `prospect`, and `friend`. The circle is case-insensitive, but must be one of these 3 values. Any other value given to `circleadd` will be rejected.
 * In [view mode](#view-mode), the index of the displayed contact is always `1`.
 * A contact can only have 1 circle at a time.
 * If the person already has a circle, addition of a circle will not be allowed.
@@ -374,7 +374,7 @@ Format: `circlerm INDEX`
 
 * Removes the circle from the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** `1, 2, 3, …` and be within the valid range of the current displayed list of contacts.
 * In [view mode](#view-mode), the index of the displayed contact is always `1`.
-* Only 1 circle can be removed at a time from 1 contact.
+* Removes the existing circle from the specified contact.
 * If the person does not have a circle, deletion of circle will not be allowed.
 
 Examples:
@@ -388,8 +388,7 @@ A circle refers to the type of relationship the user has with the contact.
 Format: `circlefilter CIRCLE`
 
 * All contacts with the specified circle will be shown in their index order in the address book.
-* There are only 3 types of circles: `client`, `prospect`, and `friend`. The circle must be one of these 3 types. 
-Any other value given to `circlefilter` will be rejected.
+* There are only 3 types of circles: `client`, `prospect`, and `friend`. The circle is case-insensitive, but must be one of these 3 values. Any other value given to `circlefilter` will be rejected.
 * Note: Circles can only be filtered via the `circlefilter` command.
 
 <div markdown="span" class="alert alert-primary">
@@ -399,8 +398,8 @@ Any other value given to `circlefilter` will be rejected.
 </div>
 
 Examples:
-* `circlefilter client` shows all contacts with the circle `client` in the address book, in their index order in the 
-address book.
+* `circlefilter client` shows all contacts with the circle `client` in the address book, in their index order in the
+  address book.
 * `circlefilter family` will lead to an error message as `family` is not an accepted circle type.
 
 ### Setting follow-up date : `followup`
@@ -414,14 +413,14 @@ Format: `followup INDEX d/DATE`
 * `DATE` must be in the format `YYYY-MM-DD` (e.g. `2026-04-01`).
 * Past dates are allowed, but the app will show a warning after the date is set.
 * Dates more than 5 years from today are allowed, but the app will show a warning after the date is set.
-* Dates in the next 3 days will be <u>**underlined and bolded**</u> to as a visual reminder. 
-If a date has passed, its formatting will be updated when the app is restarted. 
+* Dates in the next 3 days will be <u>**underlined and bolded**</u> to as a visual reminder.
+  If a date has passed, its formatting will be updated when the app is restarted.
 * Note: A follow-up date can only be added via the `followup` and `edit` commands, but not the `add` command.
 
 Examples:
 * `followup 1 d/2026-04-01` sets the follow-up date of contact 1 to `2026-04-01`.
-* `followup 2 d/2020-01-01` sets the follow-up date of contact 2 to `2020-01-01` and shows a warning because the 
-date is before today.
+* `followup 2 d/2020-01-01` sets the follow-up date of contact 2 to `2020-01-01` and shows a warning because the
+  date is before today.
 * `followup 3 d/26-03-2026` will lead to an error message because the date format is invalid.
 
 ### Clearing a follow-up date : `followupclear`
@@ -480,10 +479,10 @@ If you wish to view or edit your data, you can access the file at:
 ### Editing the data file
 
 FAM's data is saved automatically as a JSON file at:<br>
-`[JAR file location]/data/addressbook.json` <br>Advanced users are 
+`[JAR file location]/data/addressbook.json` <br>Advanced users are
 welcome to update data directly by editing that data file.
 
-**Caution:** If the file format is invalid, or if any fields contain values in an invalid format, FAM will load with an 
+**Caution:** If the file format is invalid, or if any fields contain values in an invalid format, FAM will load with an
 empty address book on the next startup. The UI will display:
 `Data file could not be loaded. Starting with empty address book.`
 
@@ -491,7 +490,7 @@ empty address book on the next startup. The UI will display:
 :warning: Warning: Although the storage file can still be manually corrected to a valid format, **running any command 
 while FAM is in this empty state will overwrite the file and permanently erase all existing data.**
 
-It is strongly recommended to back up the data file before making any changes, and to avoid executing any commands 
+It is strongly recommended to back up the data file before making any changes, and to avoid executing any commands
 until the file has been fixed.
 
 </div>
@@ -513,13 +512,13 @@ until the file has been fixed.
 **A**: Use `edit INDEX t/` to clear all tags for that contact.
 
 **Q**: Why do I have to use index `1` after `view`? <br>
-**A**: In View Mode, only the selected contact is shown, so commands that require an index must use `1`.
+**A**: In View Mode, only the selected contact remains in the filtered list, so commands that require an index must use `1`.
 
 **Q**: Why is a contact not shown in `remind`? <br>
 **A**: Only contacts with a follow-up date are shown by `remind`.
 
 **Q**: What's the difference between `tag` and `circle`? <br>
-**A**: Tag is meant to be a flexible label that you can create and use as you wish to make each contact differentiable, while circle is meant to be a single label that indicates the type of relationship you, as a FA, have with the contact. A contact can have multiple tags but only one circle.
+**A**: A tag is a flexible label that you can create and use however you like. A circle is a single label that represents the type of relationship you have with the contact. A contact can have multiple tags but only one circle.
 
 **Q**: Can I undo a `delete` or `clear` command? <br>
 **A**: No. There is currently no undo feature, so users should confirm carefully before deleting data.
@@ -528,11 +527,11 @@ until the file has been fixed.
 
 ## Known Issues
 
-1. **When using multiple screens**, if you move the application to a secondary screen and later switch to using only the 
-primary screen, the GUI may open off-screen. The remedy is to delete the `preferences.json` file created by the 
-application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command again (or use the `Help` menu, or the keyboard 
-shortcut `F1`), the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+1. **When using multiple screens**, if you move the application to a secondary screen and later switch to using only the
+   primary screen, the GUI may open off-screen. The remedy is to delete the `preferences.json` file created by the
+   application before running the application again.
+2. **If you minimize the Help Window** and then run the `help` command again (or use the `Help` menu, or the keyboard
+   shortcut `F1`), the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 3. **Reserved internal values cannot be used as input**: The values `missing@email.empty` (as an email) and `MISSING_ADDRESS` (as an address) are reserved for FAM's internal use and will be rejected with an error if entered. Use a different email or address value instead.
 
 --------------------------------------------------------------------------------------------------------------------
